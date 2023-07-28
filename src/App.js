@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import { SearchBar } from './components/SearchBar';
+import { Result } from './components/Result';
 
 function App() {
   return (
@@ -8,6 +9,9 @@ function App() {
       <div className="Header"> What's that movie where...</div>
       <div className="Search-Bar">
         <SearchBar />
+      </div>
+      <div className='Result'>
+        <Result />
       </div>
     </div>
   );
