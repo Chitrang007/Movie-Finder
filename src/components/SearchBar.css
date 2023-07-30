@@ -1,21 +1,26 @@
 .input-wrapper{
     background-color: white;
     width: 100%;
-    border: none;
     display: flex;
+    flex: 1;
     align-items: center;
+    border: 1px solid #1C1D21;
+    border-radius: 5px;
+    padding: auto;
 }
 
 input {
     background-color: transparent;
-    border: none;
+    border: none;   
     height: 100%;
     width: 100%;
     margin-left: 5px;
 }
 
 .search-button {
-    background-color: aquamarine;
+    background-color: #10DD5E;
     width: 40%;
     border: none;
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
 }
