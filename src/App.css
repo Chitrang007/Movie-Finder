@@ -9,6 +9,10 @@
   font-size: 2rem;
 }
 
+html {
+  background-color: #1C1D21;
+}
+
 .Search-Bar {
   padding-top: 20px;
   width: 40%;

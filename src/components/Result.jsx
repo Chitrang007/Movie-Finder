@@ -36,7 +36,7 @@ const Box = (props) => {
                 <br/>
                 {movie.plot}
             </div>
-            <img src="https://picsum.photos/200/300?random=1" alt="" style={{paddingTop: '10px'}}/>
+            <img src={movie.image} alt="" style={{paddingTop: '10px'}}/>
         </div>
     )
 }
