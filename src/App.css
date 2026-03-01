@@ -1,31 +1,21 @@
 .App {
   background-color: #1C1D21;
   color: white;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
 }
 
 .Header {
   text-align: center;
-  padding-top: 20px;
-  font-size: 2rem;
+  padding: 40px 20px 10px 20px;
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -1px;
 }
 
-html {
-  background-color: #1C1D21;
-}
-
-.Search-Bar {
-  padding-top: 20px;
-  width: 40%;
+.Search-Bar-Container {
+  padding: 20px;
+  width: 90%;
+  max-width: 1200px;
   margin: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 200px;
-}
-
-.Result {
-  padding-top: 20px;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-bottom: 10px;
 }

@@ -1,52 +1,69 @@
-import React, { useEffect } from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import './SearchBar.css';
 import { Result } from './Result';
 
+const API_KEY = process.env.REACT_APP_OMDB_API_KEY;
 
 export const SearchBar = () => {
-    
-    const [plot, setPlot] = useState('');
+    const [query, setQuery] = useState('');
     const [movies, setMovies] = useState([]);
-
-    const changePlot = (e) => {
-        setPlot(e.target.value);
-    }
-
-    const handleSearch = () => {
-
-        const staticMovieData = [
-            { id: 1, title: 'Iron Man', rating: 7.9, plot: 'Plot of Movie 1', year: 2008, country: 'USA', lang: 'English', image: "https://picsum.photos/200/300?random=1" },
-            { id: 2, title: 'The Island of Dr. More', rating: 5.8, plot: 'Plot of Movie 2', year: 1977, country: 'USA', lang: 'English', image: "https://picsum.photos/200/300?random=2" },
-            { id: 3, title: 'The Invincible Iron Man', rating: 6, plot: 'Plot of Movie 3', year: 2007, country: 'USA', lang: 'English', image: "https://picsum.photos/200/300?random=3" },
-            { id: 4, title: 'Dark Man', rating: 6.4, plot: 'Plot of Movie 4', year: 1990, country: 'USA', lang: 'English', image: "https://picsum.photos/200/300?random=4" },
-            { id: 5, title: '7 Aum Arivu', rating: 5.8, plot: 'Plot of Movie 5', year: 2011, country: 'India', lang: 'Tamil', image: "https://picsum.photos/200/300?random=5" },
-        ];
-        setMovies(staticMovieData);
-    }
-
-    useEffect(
-        () => {
-            console.log("Hello");
-        },
-        [plot]
-    )
-    return (
-        <div className='parent'>
+    const [loading, setLoading] = useState(false);
+    const [hasSearched, setHasSearched] = useState(false); 
+    
+    const handleSearch = async () => {
+        if (!query.trim()) return;
+        setLoading(true);
+        setHasSearched(true);
+        try {
+            const searchResponse = await fetch(`https://www.omdbapi.com/?s=${query}&apikey=${API_KEY}`);
+            const searchData = await searchResponse.json();
+            if (searchData.Search) {
+                const detailedMovies = await Promise.all(searchData.Search.map(async (movie) => {
+                    const detailResponse = await fetch(`https://www.omdbapi.com/?i=${movie.imdbID}&apikey=${API_KEY}`);
+                    const detailData = await detailResponse.json();
+                    return {
+                        id: movie.imdbID,
+                        title: movie.Title,
+                        year: movie.Year,
+                        image: movie.Poster !== "N/A" ? movie.Poster : "",
+                        plot: detailData.Plot,
+                        rating: detailData.imdbRating
+                    };
+                }));
+                setMovies(detailedMovies);
+            } else {
+                setMovies([]);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+    
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') handleSearch();
+    };
+    
+    return ( 
+        <div className='search-parent'>
             <div className="input-wrapper">
-                <input 
-                className='input' 
-                type='search'
-                value={plot} 
-                onChange={changePlot} 
-                placeholder="Enter plot here..."/>
-                <input 
-                type='button'
+                <input
+                className='input-field'
+                type='text'
+                value={query} onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Search any movie..."/>
+                <button 
                 className="search-button"
-                value="Search"
-                onClick={handleSearch}/>
+                onClick={handleSearch}
+                disabled={loading}>
+                    {loading ? '...' : 'Search'}
+                </button>
             </div>
-            <Result movies={movies} />
-        </div>
+        {hasSearched ? 
+        ( <Result movies={movies} /> ) :
+        ( <div className="welcome-msg"> <p>Search for your favorite movie to get started!</p> </div> )} 
+    </div>
     );
-}
+};
