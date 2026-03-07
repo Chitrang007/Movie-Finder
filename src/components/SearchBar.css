@@ -3,6 +3,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    animation: fadeIn 0.5s ease-in-out;
 }
 
 .input-wrapper {
@@ -33,9 +34,97 @@
     padding: 0 30px;
     font-weight: bold;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: background 0.2s, transform 0.1s;
 }
 
 .search-button:hover {
     background-color: #0dbb4f;
+}
+
+.search-button:active {
+    transform: scale(0.98);
+}
+
+.search-button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+}
+
+.hero-section {
+    margin-top: 20px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    width: 95%;
+    max-width: 1200px;
+}
+
+.hero-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 20px;
+    text-align: left;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-left: 4px solid #e50914;
+    padding-left: 15px;
+}
+
+.hero-section .results-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto; 
+    gap: 20px;
+    padding: 10px 10px 20px 10px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+.hero-section .results-container > * {
+    flex: 0 0 auto; 
+    width: 220px;
+}
+
+.hero-section .results-container::-webkit-scrollbar {
+    display: none;
+}
+
+.favorites-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    animation: slideUp 0.4s ease-out;
+}
+
+.favorites-container .view-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 30px;
+    border-left: 6px solid #10DD5E;
+    padding-left: 20px;
+    letter-spacing: -1px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+    .input-wrapper {
+        width: 90%;
+    }
+    .favorites-container .view-title {
+        font-size: 1.8rem;
+    }
 }

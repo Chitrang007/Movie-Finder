@@ -21,6 +21,7 @@
 .movie-image-container {
     position: relative;
     height: 350px;
+    overflow: hidden; /* Ensures the glassmorphism and buttons stay inside */
 }
 
 .movie-image-container img {
@@ -29,18 +30,50 @@
     object-fit: cover;
 }
 
+/* --- RATING BADGE (TOP RIGHT) --- */
 .rating-badge {
     position: absolute;
     top: 10px;
-    right: 10px;
+    right: 10px; /* Moved to Right */
     background-color: #CC9C00;
     color: black;
     padding: 4px 8px;
     border-radius: 4px;
     font-weight: bold;
     font-size: 0.9rem;
+    z-index: 5;
 }
 
+/* --- FAVORITE BUTTON (TOP LEFT) --- */
+.fav-btn {
+    position: absolute;
+    top: 10px;
+    left: 10px; /* Moved to Left */
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px); /* Glassmorphism effect */
+    z-index: 5;
+}
+
+.fav-btn:hover {
+    transform: scale(1.1);
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.fav-btn.active {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* --- CONTENT STYLES --- */
 .movie-content {
     padding: 15px;
 }
