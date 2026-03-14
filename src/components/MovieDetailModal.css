@@ -1,0 +1,235 @@
+.movie-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    padding: 20px;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.movie-modal-card {
+    background: #25262B;
+    border-radius: 16px;
+    max-width: 800px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    border: 1px solid #333;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    animation: slideUp 0.3s ease-out;
+}
+
+.movie-modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: background 0.2s;
+}
+
+.movie-modal-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.movie-modal-loading,
+.movie-modal-error {
+    padding: 60px;
+    text-align: center;
+    color: #888;
+}
+
+.movie-modal-error {
+    color: #e74c3c;
+}
+
+.movie-modal-content {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    padding: 30px;
+}
+
+.movie-modal-poster-wrap {
+    flex-shrink: 0;
+    position: relative;
+}
+
+.movie-modal-poster {
+    width: 260px;
+    height: auto;
+    border-radius: 12px;
+    display: block;
+}
+
+.movie-modal-imdb {
+    background: #CC9C00;
+    color: black;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.movie-modal-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.movie-modal-title {
+    margin: 0 0 12px 0;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: white;
+    line-height: 1.2;
+}
+
+.movie-modal-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.movie-modal-type {
+    background: #10DD5E;
+    color: #1C1D21;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.movie-modal-year {
+    color: #888;
+    font-size: 1rem;
+}
+
+.movie-modal-rated {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    color: #fff;
+}
+
+.movie-modal-row {
+    margin-bottom: 16px;
+}
+
+.movie-modal-row strong {
+    display: block;
+    color: #10DD5E;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+}
+
+.movie-modal-row p {
+    margin: 0;
+    color: #BBB;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.movie-modal-plot {
+    font-size: 1rem;
+    color: #ddd;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 640px) {
+    .movie-modal-content {
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .movie-modal-poster {
+        width: 200px;
+    }
+
+    .movie-modal-title {
+        font-size: 1.4rem;
+        text-align: center;
+    }
+
+    .movie-modal-meta {
+        justify-content: center;
+    }
+}
+
+.modal-watchlist-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background-color: #ffffff;
+    color: #000000;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    margin: 20px 0;
+    transition: all 0.2s ease;
+    width: 100%;
+    max-width: 300px;
+}
+
+@media (mouseenter: hover) {
+    .modal-watchlist-btn:hover {
+        background-color: #10DD5E;
+        color: #000000;
+        transform: scale(1.02);
+    }
+}
+
+.modal-watchlist-btn:active {
+    background-color: #0cb84d;
+    transform: scale(0.98);
+}
+
+.modal-watchlist-btn.active {
+    background-color: #333333;
+    color: #ffffff;
+    border: 1px solid #444;
+}
+
+@media (max-width: 768px) {
+    .modal-watchlist-btn {
+        font-size: 1.1rem;
+        padding: 16px;
+    }
+    
+    .modal-icon-container {
+        width: 28px;
+        height: 28px;
+    }
+}

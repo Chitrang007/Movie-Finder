@@ -1,70 +1,48 @@
-# Getting Started with Create React App
+# CMDB – Chitrang's Movie Database (CineStream)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+CMDB (CineStream) is a React-based movie and TV show finder that lets you quickly search titles, explore featured picks, and maintain a personal watchlist stored in your browser.
 
-## Available Scripts
+It uses the public OMDb API to fetch detailed information including poster, year, plot, and IMDb rating.
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Instant search**: Search for movies and series by title using the OMDb API.
+- **Detailed results**: See posters, year of release, plot overview, and IMDb ratings for each result.
+- **Featured picks**: Home screen shows curated titles like *Breaking Bad*, *Interstellar*, *The Dark Knight*, *Game of Thrones*, *Iron Man*, and *Loki*.
+- **Watchlist (favorites)**:  
+  - Add/remove items from your watchlist with a heart button.  
+  - Watchlist count is visible in the navbar as **WatchList (N)**.  
+  - A dedicated **My List** view shows only your saved titles.
+- **Local persistence**: Favorites are stored in `localStorage` under the key `cine-favs`, so your watchlist survives page reloads.
+- **Responsive UI**: Modern layout with custom styling and Bootstrap.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## Tech Stack
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Frontend**: React (Create React App)
+- **Styling**: CSS modules in `App.css`, `SearchBar.css`, and `Result.css` plus `bootstrap/dist/css/bootstrap.css`
+- **Data Source**: [OMDb API](https://www.omdbapi.com/)
+- **Build Tooling**: Create React App
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Getting Started
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Prerequisites
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **Node.js** (LTS recommended)
+- **npm** (comes with Node)
 
-### `npm run eject`
+You also need a free OMDb API key from [https://www.omdbapi.com/apikey.aspx](https://www.omdbapi.com/apikey.aspx).
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Installation
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+# Clone the repository
+git clone <your-repo-url>
+cd Movie-Finder
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+# Install dependencies
+npm install

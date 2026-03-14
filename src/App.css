@@ -87,14 +87,18 @@
   font-size: 2.5rem;
   font-weight: 800;
   letter-spacing: -1px;
+  width: 100%;
 }
 
 .main-container {
   padding: 20px;
   width: 90%;
   max-width: 1200px;
-  margin: auto;
+  margin: 0 auto;
   min-height: calc(100vh - 70px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .view-title {
@@ -123,4 +127,60 @@
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(5px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  .navbar {
+    height: auto;
+    min-height: 70px;
+    padding: 12px 0;
+  }
+
+  .nav-content {
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .logo {
+    font-size: 1.2rem;
+    gap: 8px;
+    order: 1;
+  }
+
+  .logo-img {
+    height: 32px;
+  }
+
+  .nav-links {
+    gap: 20px;
+    order: 2;
+  }
+
+  .nav-btn {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+  }
+
+  .Header {
+    font-size: 1.6rem;
+    padding: 30px 16px 10px 16px;
+  }
+
+  .main-container {
+    padding: 16px;
+    width: 95%;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo {
+    font-size: 1rem;
+  }
+
+  .Header {
+    font-size: 1.4rem;
+  }
 }
