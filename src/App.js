@@ -5,19 +5,25 @@ import { SearchBar } from './components/SearchBar';
 function App() {
   const [view, setView] = useState('home');
   const [favCount, setFavCount] = useState(0);
+  const [homeResetKey, setHomeResetKey] = useState(0);
+
+  const goHome = () => {
+    setView('home');
+    setHomeResetKey((k) => k + 1);
+  };
 
   return (
     <div className="App">
       <nav className="navbar">
         <div className="nav-content">
-          <div className="logo" onClick={() => setView('home')}>
+          <div className="logo" onClick={goHome}>
             <img src="/logo1.png" alt="CineStream Logo" className="logo-img" />
-            CineStream
+            CMDB | Chitrang's Movie Database
           </div>
           <div className="nav-links">
             <button
               className={`nav-btn ${view === 'home' ? 'active' : ''}`}
-              onClick={() => setView('home')}
+              onClick={goHome}
             >
               Home
             </button>
@@ -25,7 +31,7 @@ function App() {
               className={`nav-btn ${view === 'favorites' ? 'active' : ''}`}
               onClick={() => setView('favorites')}
             >
-              WatchList ({favCount})
+              My List ({favCount})
             </button>
           </div>
         </div>
@@ -37,6 +43,7 @@ function App() {
           placeholder="Browse movies or series titles..."
           currentView={view}
           onFavoritesChange={(count) => setFavCount(count)}
+          homeResetKey={homeResetKey}
         />
       </div>
     </div>
