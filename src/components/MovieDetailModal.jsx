@@ -2,27 +2,29 @@ import React, { useEffect, useState } from 'react';
 import './MovieDetailModal.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HiPlus, HiCheck } from 'react-icons/hi';
-
-const API_KEY = process.env.REACT_APP_OMDB_API_KEY;
+import { API_KEY } from './SearchBar';
+import { PosterPlaceHolder } from './Result';
 
 export const MovieDetailModal = ({ isOpen, onClose, movieId, favorites, onToggleFavorite }) => {
     const [details, setDetails] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [imgError, setImgError] = useState(false);
 
-    // Check if this movie is already in the watchlist
     const isFavorite = favorites?.some(fav => fav.id === movieId);
 
     useEffect(() => {
         if (!isOpen || !movieId) {
             setDetails(null);
             setError(null);
+            setImgError(false);
             return;
         }
 
         const fetchDetails = async () => {
             setLoading(true);
             setError(null);
+            setImgError(false);
             try {
                 const res = await fetch(`https://www.omdbapi.com/?i=${movieId}&plot=full&apikey=${API_KEY}`);
                 const data = await res.json();
@@ -42,7 +44,6 @@ export const MovieDetailModal = ({ isOpen, onClose, movieId, favorites, onToggle
         fetchDetails();
     }, [isOpen, movieId]);
 
-    // Handle body scroll lock
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = 'hidden';
@@ -104,11 +105,16 @@ export const MovieDetailModal = ({ isOpen, onClose, movieId, favorites, onToggle
                 {details && !loading && (
                     <div className="movie-modal-content">
                         <div className="movie-modal-poster-wrap">
-                            <img
-                                src={details.Poster !== "N/A" ? details.Poster : 'https://via.placeholder.com/300x450?text=No+Poster'}
-                                alt={details.Title}
-                                className="movie-modal-poster"
-                            />
+                            {(!details.Poster || details.Poster === 'N/A' || imgError) ? (
+                                <PosterPlaceHolder />
+                            ) : (
+                                <img
+                                    src={details.Poster}
+                                    alt={details.Title}
+                                    className="movie-modal-poster"
+                                    onError={() => setImgError(true)}
+                                />
+                            )}
                         </div>
 
                         <div className="movie-modal-info">
