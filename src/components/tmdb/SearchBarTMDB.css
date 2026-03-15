@@ -25,11 +25,16 @@
 .tmdb-input-wrapper {
     display: flex;
     max-width: 700px;
-    margin: 0 auto 50px auto;
+    margin: 0 auto 20px auto;
     background: #1A1B1E;
     padding: 6px;
     border-radius: 12px;
     border: 1px solid #333;
+    transition: border-color 0.3s ease;
+}
+
+.tmdb-input-wrapper:focus-within {
+    border-color: #10DD5E;
 }
 
 .tmdb-input-field {
@@ -50,6 +55,56 @@
     border-radius: 8px;
     font-weight: 800;
     cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tmdb-search-button:hover:not(:disabled) {
+    background: #ffffff;
+    transform: scale(1.02);
+}
+
+.tmdb-search-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.tmdb-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin: 0 auto 50px auto;
+    max-width: 850px;
+    padding: 0 10px;
+}
+
+.tmdb-suggestions-label {
+    width: 100%;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.tmdb-suggestion-pill {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.8);
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+}
+
+.tmdb-suggestion-pill:hover {
+    background: rgba(16, 221, 94, 0.1);
+    border-color: #10DD5E;
+    color: #10DD5E;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(16, 221, 94, 0.15);
 }
 
 .tmdb-content-section {
@@ -127,6 +182,13 @@
     padding: 100px 0;
 }
 
+.tmdb-search-loading-text {
+    margin-top: 20px;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
 .tmdb-search-spinner {
     width: 50px;
     height: 50px;
@@ -136,4 +198,10 @@
     animation: tmdb-spin 1s linear infinite;
 }
 
-@keyframes tmdb-spin { to { transform: rotate(360deg); } }
+@keyframes tmdb-spin { 
+    to { transform: rotate(360deg); } 
+}
+
+.tmdb-favorites-container {
+    padding-top: 20px;
+}
