@@ -113,7 +113,7 @@ export const MovieDetailModalTMDB = ({ isOpen, onClose, movieId, mediaType, favo
                                             {details.number_of_seasons} {details.number_of_seasons === 1 ? 'Season': 'Seasons'}
                                         </span>
                                     )}
-                                    {details.status && <span className="status-badge">{details.status}</span>}
+                                    {details.status && <span className='status-badge'>{details.status}</span>}
                                 </div>
                             </div>
                         </div>
@@ -198,12 +198,12 @@ export const MovieDetailModalTMDB = ({ isOpen, onClose, movieId, mediaType, favo
                         <div className='tmdb-video-container' onClick={e => e.stopPropagation()}>
                             <iframe
                                 src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1`}
-                                title="YouTube trailer"
-                                frameBorder="0"
-                                allow="autoplay; encrypted-media"
+                                title='YouTube trailer'
+                                frameBorder='0'
+                                allow='autoplay; encrypted-media'
                                 allowFullScreen
                             ></iframe>
-                            <button className="close-video" onClick={() => setShowVideo(false)}>Close</button>
+                            <button className='close-video' onClick={() => setShowVideo(false)}>Close</button>
                         </div>
                     </div>
                 )}

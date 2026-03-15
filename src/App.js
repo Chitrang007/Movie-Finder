@@ -4,42 +4,44 @@ import { SearchBar } from './components/SearchBar';
 import { SearchBarTMDB } from './components/tmdb/SearchBarTMDB';
 
 function App() {
-  const [view, setView] = useState('beta');
+  // 'home' is now the TMDB Pro view, 'classic' is the OMDb view
+  const [view, setView] = useState('home');
   const [favCount, setFavCount] = useState(0);
+  const [classicResetKey, setClassicResetKey] = useState(0);
   const [homeResetKey, setHomeResetKey] = useState(0);
-  const [betaResetKey, setBetaResetKey] = useState(0);
 
   const goHome = () => {
     setView('home');
     setHomeResetKey((k) => k + 1);
   };
 
-  const goPro = () => {
-    setView('beta');
-    setBetaResetKey((k) => k + 1);
+  const goClassic = () => {
+    setView('classic');
+    setClassicResetKey((k) => k + 1);
   };
 
   return (
     <div className='App'>
       <nav className='navbar'>
         <div className='nav-content'>
-          <div className='logo' onClick={goPro} style={{ cursor: 'pointer' }}>
+          <div className='logo' onClick={goHome} style={{ cursor: 'pointer' }}>
             <img src='/logo1.png' alt='CineStream Logo' className='logo-img' />
             CMDB | Chitrang's Movie Database
           </div>
+          
           <div className='nav-links'>
             <button
-              className={`nav-btn beta-nav-btn ${view === 'beta' ? 'active' : ''}`}
-              onClick={goPro}
+              className={`nav-btn beta-nav-btn ${view === 'home' ? 'active' : ''}`}
+              onClick={goHome}
             >
               CMDB Pro
             </button>
             
             <button
-              className={`nav-btn ${view === 'home' ? 'active' : ''}`}
-              onClick={goHome}
+              className={`nav-btn ${view === 'classic' ? 'active' : ''}`}
+              onClick={goClassic}
             >
-              CMDB
+              CMDB Classic
             </button>
             
             <button
@@ -53,31 +55,31 @@ function App() {
       </nav>
 
       <div className='main-container'>
-        {/* Header Logic: Ordered to match the new flow */}
-        {view === 'beta' && <div className='Header Header-beta'>CMDB Pro: Plot Based Discovery.</div>}
-        {view === 'home' && <div className='Header'>Classic CMDB Search. Find a stream.</div>}
+        {/* Header Logic: Highlighting the Pro and Classic distinction */}
+        {view === 'home' && <div className='Header Header-beta'>CMDB Pro: Plot Based Discovery.</div>}
+        {view === 'classic' && <div className='Header'>CMDB Classic: Title Search. Find a stream.</div>}
         {view === 'favorites' && <div className='Header'>Your CMDB Vault.</div>}
 
-        {view === 'beta' ? (
+        {view === 'home' ? (
           <SearchBarTMDB 
-            key="pro-engine-active" 
-            currentView={view}
+            key='pro-engine-active' 
+            currentView='home'
             onFavoritesChange={(count) => setFavCount(count)}
-            betaResetKey={betaResetKey}
+            betaResetKey={homeResetKey}
           />
         ) : view === 'favorites' ? (
           <SearchBarTMDB 
-            key="favorites-engine-active"
+            key='favorites-engine-active'
             currentView='favorites'
             onFavoritesChange={(count) => setFavCount(count)}
-            betaResetKey={betaResetKey}
+            betaResetKey={homeResetKey}
           />
         ) : (
           <SearchBar
             placeholder='Browse movies or series titles...'
-            currentView={view}
+            currentView='classic'
             onFavoritesChange={(count) => setFavCount(count)}
-            homeResetKey={homeResetKey}
+            homeResetKey={classicResetKey}
           />
         )}
       </div>

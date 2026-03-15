@@ -7,7 +7,7 @@ import { MovieDetailModal } from '../MovieDetailModal';
 export const TMDB_KEY = process.env.REACT_APP_TMDB_API_KEY;
 export const IMG_BASE = 'https://image.tmdb.org/t/p/w500';
 
-export const SearchBarTMDB = ({ placeholder, onFavoritesChange, betaResetKey, currentView }) => {
+export const SearchBarTMDB = ({ onFavoritesChange, betaResetKey, currentView }) => {
     const [query, setQuery] = useState('');
     const [movies, setMovies] = useState([]);
     const [featured, setFeatured] = useState([]);
@@ -17,7 +17,6 @@ export const SearchBarTMDB = ({ placeholder, onFavoritesChange, betaResetKey, cu
     const [loading, setLoading] = useState(false);
     const [hasSearched, setHasSearched] = useState(false);
     
-    // SOURCE OF TRUTH FOR MODAL
     const [selectedMediaType, setSelectedMediaType] = useState('movie');
     const [selectedMovieId, setSelectedMovieId] = useState(null);
     
@@ -26,13 +25,31 @@ export const SearchBarTMDB = ({ placeholder, onFavoritesChange, betaResetKey, cu
         return saved ? JSON.parse(saved) : [];
     });
 
-    // Helper to open modal with specific type
+    const suggestions = [
+        { label: 'Inception', plot: 'Dream inside dream'},
+        { label: 'Loki', plot: 'God of Mischief mystery' },
+        { label: 'Harry Potter', plot: 'Kid wizard school'},
+        { label: 'The Office', plot: 'Mockumentry office life'},
+        { label: 'Friends', plot: 'Six friends new york sitcom '},
+        { label: 'Infinity War', plot: 'Infinity stones Thanos' },
+        { label: 'Wednesday', plot: 'Gothic girl Nevermore Academy' },
+    ];
+
+    const plotDictionary = {
+        'billionaire armored suit': 'iron man',
+        'infinity stones thanos': 'avengers infinity war',
+        'god of mischief': 'loki',
+        'gothic girl nevermore': 'wednesday',
+        'wizard school': 'harry potter',
+        'dream inside dream': 'inception',
+        'time travel paradox': 'dark'
+    };
+
     const handleItemClick = (id, type) => {
         setSelectedMediaType(type || 'movie');
         setSelectedMovieId(id);
     };
 
-    // FORMATTER: Now injects media_type into every object
     const formatTMDBMovie = (movie) => ({
         id: movie.id,
         title: movie.title || movie.name,
@@ -40,16 +57,27 @@ export const SearchBarTMDB = ({ placeholder, onFavoritesChange, betaResetKey, cu
         image: movie.poster_path ? `${IMG_BASE}${movie.poster_path}` : '',
         plot: movie.overview,
         rating: movie.vote_average?.toFixed(1),
-        // Crucial for solving the mismatch
         media_type: movie.media_type || (movie.first_air_date ? 'tv' : 'movie')
     });
 
+    // EFFECT: Sync Favorites to LocalStorage
     useEffect(() => {
         localStorage.setItem('cine-favs', JSON.stringify(favorites));
         if (onFavoritesChange) onFavoritesChange(favorites.length);
     }, [favorites, onFavoritesChange]);
 
-    // Initial Fetch
+    // EFFECT: The 'Refresh' Logic from Nav Button
+    useEffect(() => {
+        if (betaResetKey > 0) {
+            setQuery('');
+            setMovies([]);
+            setHasSearched(false);
+            setLoading(false);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }, [betaResetKey]);
+
+    // EFFECT: Initial Data Fetch
     useEffect(() => {
         const fetchInitialData = async () => {
             try {
@@ -87,31 +115,60 @@ export const SearchBarTMDB = ({ placeholder, onFavoritesChange, betaResetKey, cu
         setLoading(true);
         setHasSearched(true);
 
-        const trackCall = () => {
-            const today = new Date().toDateString();
-            const stats = JSON.parse(localStorage.getItem('omdb_stats')) || { date: today, count: 0 };
-
-            if (stats.date === today) {
-                stats.count += 1;
-            } else {
-                stats.date = today;
-                stats.count = 1;
-            }
-            localStorage.setItem('omdb_stats', JSON.stringify(stats));
-            console.log(`OMDb Calls Today: ${stats.count}/1000`);
-        };
+        const lowerQuery = finalQuery.toLowerCase();
+        Object.keys(plotDictionary).forEach(plot => {
+            if(lowerQuery.includes(plot)) finalQuery = plotDictionary[plot];
+        });
 
         try {
-            trackCall();
-            const res = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${TMDB_KEY}&query=${encodeURIComponent(finalQuery)}`);
-            const data = await res.json();
-            const filtered = (data.results || []).filter(i => i.media_type !== "person" && i.poster_path);
-            setMovies(filtered.map(formatTMDBMovie));
+            const words = finalQuery
+                .toLowerCase()
+                .replace(/[.,/#!$%^&*;:{}=\-_~()]/g, '')
+                .split(' ')
+                .filter(w => w.length > 3)
+                .slice(0,5);
+
+            let candidateMovies = [];
+            const requests = words.map(word =>
+                fetch(`https://api.themoviedb.org/3/search/multi?api_key=${TMDB_KEY}&query=${encodeURIComponent(word)}`)
+            );
+
+            const responses = await Promise.all(requests);
+            const dataResults = await Promise.all(responses.map(r => r.json()));
+
+            dataResults.forEach(data => {
+                if(data.results) candidateMovies.push(...data.results.filter(i => i.media_type !== 'person'));
+            });
+
+            const uniqueMovies = Array.from(new Map(candidateMovies.map(m => [m.id, m])).values());
+
+            const scoredResults = uniqueMovies.map(movie => {
+                let score = movie.popularity || 0;
+                const plotText = (movie.overview || '').toLowerCase();
+                const titleText = (movie.title || movie.name || '').toLowerCase();
+                words.forEach(word => {
+                    if(titleText.includes(word)) score += 200;
+                    if(plotText.includes(word)) score += 120;
+                });
+                return { ...movie, searchScore: score };
+            });
+
+            const finalResults = scoredResults
+                .filter(m => m.poster_path)
+                .sort((a,b)=> b.searchScore - a.searchScore)
+                .slice(0,20);
+
+            setMovies(finalResults.map(formatTMDBMovie));
         } catch (error) {
-            console.error('Search Error:', error);
+            console.error('Search Accuracy Error:', error);
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleSuggestionClick = (plotText) => {
+        setQuery(plotText);
+        handleSearch(plotText);
     };
 
     const ModalOverlay = () => {
@@ -131,38 +188,24 @@ export const SearchBarTMDB = ({ placeholder, onFavoritesChange, betaResetKey, cu
     };
 
     if (currentView === 'favorites') {
-        const omdbFavs = favorites.filter(f => String(f.id).startsWith('tt'));
-        const tmdbFavs = favorites.filter(f => !String(f.id).startsWith('tt'));
-
+        const proList = favorites.filter(f => !String(f.id).startsWith('tt'));
+        const cmdbList = favorites.filter(f => String(f.id).startsWith('tt'));
         return (
             <div className='tmdb-search-parent'>
-                {tmdbFavs.length > 0 && (
-                    <div className='tmdb-content-section pro-list'>
-                        <h3 className='tmdb-section-title ribbon-red'>CMDB Pro List</h3>
-                        <Result 
-                            movies={tmdbFavs} 
-                            favorites={favorites} 
-                            onToggleFavorite={toggleFavorite} 
-                            onMovieClick={(id) => {
-                                const item = tmdbFavs.find(f => f.id === id);
-                                handleItemClick(id, item?.media_type);
-                            }} 
-                        />
-                    </div>
-                )}
-                {omdbFavs.length > 0 && (
-                    <div className='tmdb-content-section classic-list'>
-                        <h3 className='tmdb-section-title ribbon-gold'>CMDB List</h3>
-                        <Result 
-                            movies={omdbFavs} 
-                            favorites={favorites} 
-                            onToggleFavorite={toggleFavorite} 
-                            onMovieClick={(id) => handleItemClick(id, 'movie')} 
-                        />
-                    </div>
-                )}
-
-                
+                <div className='tmdb-favorites-container'>
+                    {proList.length > 0 && (
+                        <div className='tmdb-content-section pro-list'>
+                            <h3 className='tmdb-section-title ribbon-red'>CMDB Pro List</h3>
+                            <Result movies={proList} favorites={favorites} onToggleFavorite={toggleFavorite} onMovieClick={(id) => handleItemClick(id, proList.find(f => f.id === id)?.media_type)} />
+                        </div>
+                    )}
+                    {cmdbList.length > 0 && (
+                        <div className='tmdb-content-section classic-list'>
+                            <h3 className='tmdb-section-title ribbon-gold'>CMDB List</h3>
+                            <Result movies={cmdbList} favorites={favorites} onToggleFavorite={toggleFavorite} onMovieClick={(id) => handleItemClick(id, 'movie')} />
+                        </div>
+                    )}
+                </div>
                 <ModalOverlay />
             </div>
         );
@@ -170,22 +213,53 @@ export const SearchBarTMDB = ({ placeholder, onFavoritesChange, betaResetKey, cu
 
     return (
         <div className='tmdb-search-parent'>
+            <div className='tmdb-beta-banner'>✨ PRO ENGINE ACTIVE</div>
+            
             <div className='tmdb-input-wrapper'>
-                <input className='tmdb-input-field' value={query} onChange={(e)=>setQuery(e.target.value)} onKeyDown={(e)=>e.key==='Enter' && handleSearch()} placeholder='Describe a plot...' />
-                <button className='tmdb-search-button' onClick={() => handleSearch()} disabled={loading}>{loading ? '...' : 'Search'}</button>
+                <input
+                    className='tmdb-input-field'
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                    placeholder='Describe a plot...'
+                />
+                <button className='tmdb-search-button' onClick={() => handleSearch()} disabled={loading}>
+                    {loading ? '...' : 'Search'}
+                </button>
             </div>
 
+            {!hasSearched && (
+                <div className='tmdb-suggestions'>
+                    <span className='tmdb-suggestions-label'>Try searching:</span>
+                    {suggestions.map((item, index) => (
+                        <button key={index} className='tmdb-suggestion-pill' onClick={() => handleSuggestionClick(item.plot)}>
+                            '{item.plot}'
+                        </button>
+                    ))}
+                </div>
+            )}
+
             {hasSearched ? (
-                <Result movies={movies} favorites={favorites} onToggleFavorite={toggleFavorite} onMovieClick={(id) => {
-                    const item = movies.find(m => m.id === id);
-                    handleItemClick(id, item?.media_type);
-                }} />
+                loading ? (
+                    <div className='tmdb-search-loading'>
+                        <div className='tmdb-search-spinner' />
+                        <p className='tmdb-search-loading-text'>Analyzing Universe...</p>
+                    </div>
+                ) : (
+                    <Result
+                        movies={movies}
+                        favorites={favorites}
+                        onToggleFavorite={toggleFavorite}
+                        onMovieClick={(id) => handleItemClick(id, movies.find(m => m.id === id)?.media_type)}
+                    />
+                )
             ) : (
                 <>
-                    <Section title="Featured Picks" data={featured} onMovieClick={handleItemClick} favorites={favorites} toggleFavorite={toggleFavorite} />
-                    <Section title="Trending Right Now" data={trending} onMovieClick={handleItemClick} favorites={favorites} toggleFavorite={toggleFavorite} />
-                    <Section title="Top Rated Movies" data={allTimeMovies} onMovieClick={(id)=>handleItemClick(id, 'movie')} favorites={favorites} toggleFavorite={toggleFavorite} />
-                    <Section title="Top TV Series" data={allTimeSeries} onMovieClick={(id)=>handleItemClick(id, 'tv')} favorites={favorites} toggleFavorite={toggleFavorite} />
+                    <Section title='Featured Picks' data={featured} onMovieClick={handleItemClick} favorites={favorites} toggleFavorite={toggleFavorite} className='tmdb-section-featured' />
+                    <Section title='Trending Right Now' data={trending} onMovieClick={handleItemClick} favorites={favorites} toggleFavorite={toggleFavorite} className='tmdb-section-trending' />
+                    <div className='tmdb-all-time-break'><h2 className='tmdb-all-time-break-title'>All Time Fan Favorites</h2></div>
+                    <Section title='Top Rated Movies' data={allTimeMovies} onMovieClick={(id)=>handleItemClick(id, 'movie')} favorites={favorites} toggleFavorite={toggleFavorite} className='tmdb-section-movies' />
+                    <Section title='Top TV Series' data={allTimeSeries} onMovieClick={(id)=>handleItemClick(id, 'tv')} favorites={favorites} toggleFavorite={toggleFavorite} className='tmdb-section-series' />
                 </>
             )}
             <ModalOverlay />
@@ -193,18 +267,14 @@ export const SearchBarTMDB = ({ placeholder, onFavoritesChange, betaResetKey, cu
     );
 };
 
-// Internal Helper for Sections
-const Section = ({ title, data, onMovieClick, favorites, toggleFavorite }) => (
-    <div className='tmdb-content-section'>
+const Section = ({ title, data, onMovieClick, favorites, toggleFavorite, className }) => (
+    <div className={`tmdb-content-section ${className}`}>
         <h3 className='tmdb-section-title'>{title}</h3>
         <Result 
             movies={data} 
             favorites={favorites} 
             onToggleFavorite={toggleFavorite} 
-            onMovieClick={(id) => {
-                const item = data.find(m => m.id === id);
-                onMovieClick(id, item?.media_type);
-            }} 
+            onMovieClick={(id) => onMovieClick(id, data.find(m => m.id === id)?.media_type)} 
         />
     </div>
 );
