@@ -7,7 +7,7 @@ import { TMDB_KEY, IMG_BASE } from './SearchBarTMDB';
 
 const BACKDROP_BASE = 'https://image.tmdb.org/t/p/original';
 
-export const MovieDetailModalTMDB = ({ isOpen, onClose, movieId, favorites, onToggleFavorite }) => {
+export const MovieDetailModalTMDB = ({ isOpen, onClose, movieId, mediaType, favorites, onToggleFavorite }) => {
     const [details, setDetails] = useState(null);
     const [providers, setProviders] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -25,14 +25,18 @@ export const MovieDetailModalTMDB = ({ isOpen, onClose, movieId, favorites, onTo
         const fetchAllData = async () => {
             setLoading(true);
             setImgError(false);
+
+            const category = mediaType === 'tv' ? 'tv' : 'movie';
+
             try {
                 const [detailRes, providerRes] = await Promise.all([
-                    fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${TMDB_KEY}`),
-                    fetch(`https://api.themoviedb.org/3/movie/${movieId}/watch/providers?api_key=${TMDB_KEY}`)
+                    fetch(`https://api.themoviedb.org/3/${category}/${movieId}?api_key=${TMDB_KEY}`),
+                    fetch(`https://api.themoviedb.org/3/${category}/${movieId}/watch/providers?api_key=${TMDB_KEY}`)
                 ]);
 
                 const detailData = await detailRes.json();
                 const providerData = await providerRes.json();
+                
                 setDetails(detailData);
                 setProviders(providerData.results?.IN?.flatrate || []);
             } catch (err) {
@@ -43,21 +47,34 @@ export const MovieDetailModalTMDB = ({ isOpen, onClose, movieId, favorites, onTo
         };
 
         fetchAllData();
-    }, [isOpen, movieId]);
+    }, [isOpen, movieId, mediaType]);
 
     const handleToggle = () => {
         if (details) {
             onToggleFavorite({
                 id: details.id,
-                title: details.title,
-                year: details.release_date?.split('-')[0],
+                title: details.title || details.name,
+                year: (details.release_date || details.first_air_date)?.split('-')[0],
                 image: details.poster_path ? `${IMG_BASE}${details.poster_path}` : '',
                 plot: details.overview,
-                rating: details.vote_average?.toFixed(1)
+                rating: details.vote_average?.toFixed(1),
+                media_type: mediaType
             });
         }
     };
 
+    const getRuntimeDisplay = () => {
+        if (!details) return '';
+        if (details.runtime) return `${details.runtime} min`;
+        if (details.episode_run_time && details.episode_run_time.length > 0) {
+            return `Average run time: ${details.episode_run_time[0]} min`;
+        }
+        if (details.last_episode_to_air?.runtime) {
+            return `Average run time: ${details.last_episode_to_air.runtime} min`;
+        }
+        return 'N/A';
+    };
+    
     if (!isOpen) return null;
 
     return (
@@ -81,11 +98,22 @@ export const MovieDetailModalTMDB = ({ isOpen, onClose, movieId, favorites, onTo
                             backgroundImage: `linear-gradient(to bottom, rgba(37,38,43,0.2), #25262B), url(${BACKDROP_BASE}${details.backdrop_path})` 
                         }}>
                             <div className='tmdb-hero-content'>
-                                <h2 className='tmdb-modal-title'>{details.title}</h2>
+                                <h2 className='tmdb-modal-title'>{details.title || details.name}</h2>
+                                
                                 <div className='tmdb-modal-meta'>
-                                    <span className='tmdb-modal-year'>{details.release_date?.split('-')[0]}</span>
+                                    <span className='tmdb-modal-year'>
+                                        {(details.release_date || details.first_air_date)?.split('-')[0]}
+                                    </span>
                                     <span className='tmdb-modal-rating'>★ {details.vote_average?.toFixed(1)}</span>
-                                    <span className='tmdb-modal-runtime'>{details.runtime} min</span>
+                                    <span className='tmdb-modal-runtime'>{getRuntimeDisplay()}</span>
+                                    {details.number_of_seasons && (
+                                        <span className='tmdb-modal-seasons'>
+                                            {details.number_of_seasons} {details.number_of_seasons === 1 ? 'Season': 'Seasons'}
+                                        </span>
+                                    )}
+                                    {details.status && (
+                                        <span className="status-badge">{details.status}</span>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -98,25 +126,9 @@ export const MovieDetailModalTMDB = ({ isOpen, onClose, movieId, favorites, onTo
                                     <img 
                                         src={`${IMG_BASE}${details.poster_path}`} 
                                         className='tmdb-modal-poster' 
-                                        alt={details.title}
+                                        alt={details.title || details.name}
                                         onError={() => setImgError(true)}
                                     />
-                                )}
-
-                                {providers.length > 0 && (
-                                    <div className='streaming-container'>
-                                        <p className='streaming-label'>Stream on</p>
-                                        <div className='streaming-list'>
-                                            {providers.map(p => (
-                                                <img 
-                                                    key={p.provider_id}
-                                                    src={`https://image.tmdb.org/t/p/original${p.logo_path}`} 
-                                                    alt={p.provider_name}
-                                                    className='provider-logo'
-                                                />
-                                            ))}
-                                        </div>
-                                    </div>
                                 )}
                             </div>
 
@@ -127,31 +139,36 @@ export const MovieDetailModalTMDB = ({ isOpen, onClose, movieId, favorites, onTo
                                 >
                                     <div className='modal-icon-container'>
                                         <AnimatePresence mode='wait' initial={false}>
-                                            {isFavorite ? (
-                                                <motion.div
-                                                    key='check'
-                                                    initial={{ scale: 0.5, opacity: 0, rotate: -45 }}
-                                                    animate={{ scale: 1, opacity: 1, rotate: 0 }}
-                                                    exit={{ scale: 0.5, opacity: 0 }}
-                                                    transition={{ duration: 0.2 }}
-                                                >
-                                                    <HiCheck size={24} />
-                                                </motion.div>
-                                            ) : (
-                                                <motion.div
-                                                    key='plus'
-                                                    initial={{ scale: 0.5, opacity: 0, rotate: 45 }}
-                                                    animate={{ scale: 1, opacity: 1, rotate: 0 }}
-                                                    exit={{ scale: 0.5, opacity: 0 }}
-                                                    transition={{ duration: 0.2 }}
-                                                >
-                                                    <HiPlus size={24} />
-                                                </motion.div>
-                                            )}
+                                            <motion.div
+                                                key={isFavorite ? 'check' : 'plus'}
+                                                initial={{ scale: 0.5, opacity: 0 }}
+                                                animate={{ scale: 1, opacity: 1 }}
+                                                exit={{ scale: 0.5, opacity: 0 }}
+                                                transition={{ duration: 0.2 }}
+                                            >
+                                                {isFavorite ? <HiCheck size={24} /> : <HiPlus size={24} />}
+                                            </motion.div>
                                         </AnimatePresence>
                                     </div>
                                     <span>{isFavorite ? 'In My List' : 'Add to My List'}</span>
                                 </button>
+
+                                {providers.length > 0 && (
+                                    <div className='streaming-container'>
+                                        <p className='streaming-label'>Where to Watch</p>
+                                        <div className='streaming-list'>
+                                            {providers.map(p => (
+                                                <img 
+                                                    key={p.provider_id}
+                                                    src={`https://image.tmdb.org/t/p/original${p.logo_path}`} 
+                                                    alt={p.provider_name}
+                                                    className='provider-logo'
+                                                    title={p.provider_name}
+                                                />
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
 
                                 <div className='tmdb-plot-box'>
                                     <strong>Overview</strong>
