@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './MovieDetailModal.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HiPlus, HiCheck } from 'react-icons/hi';
-import { API_KEY } from './SearchBar';
+import { OMDB_KEY } from './SearchBar';
 import { PosterPlaceHolder } from './Result';
 
 export const MovieDetailModal = ({ isOpen, onClose, movieId, favorites, onToggleFavorite }) => {
@@ -26,7 +26,7 @@ export const MovieDetailModal = ({ isOpen, onClose, movieId, favorites, onToggle
             setError(null);
             setImgError(false);
             try {
-                const res = await fetch(`https://www.omdbapi.com/?i=${movieId}&plot=full&apikey=${API_KEY}`);
+                const res = await fetch(`https://www.omdbapi.com/?i=${movieId}&plot=full&apikey=${OMDB_KEY}`);
                 const data = await res.json();
                 if (data.Response === "True") {
                     setDetails(data);

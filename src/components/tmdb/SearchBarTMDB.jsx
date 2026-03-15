@@ -87,7 +87,22 @@ export const SearchBarTMDB = ({ placeholder, onFavoritesChange, betaResetKey, cu
         setLoading(true);
         setHasSearched(true);
 
+        const trackCall = () => {
+            const today = new Date().toDateString();
+            const stats = JSON.parse(localStorage.getItem('omdb_stats')) || { date: today, count: 0 };
+
+            if (stats.date === today) {
+                stats.count += 1;
+            } else {
+                stats.date = today;
+                stats.count = 1;
+            }
+            localStorage.setItem('omdb_stats', JSON.stringify(stats));
+            console.log(`OMDb Calls Today: ${stats.count}/1000`);
+        };
+
         try {
+            trackCall();
             const res = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${TMDB_KEY}&query=${encodeURIComponent(finalQuery)}`);
             const data = await res.json();
             const filtered = (data.results || []).filter(i => i.media_type !== "person" && i.poster_path);
@@ -116,12 +131,38 @@ export const SearchBarTMDB = ({ placeholder, onFavoritesChange, betaResetKey, cu
     };
 
     if (currentView === 'favorites') {
+        const omdbFavs = favorites.filter(f => String(f.id).startsWith('tt'));
+        const tmdbFavs = favorites.filter(f => !String(f.id).startsWith('tt'));
+
         return (
             <div className='tmdb-search-parent'>
-                <Result movies={favorites} favorites={favorites} onToggleFavorite={toggleFavorite} onMovieClick={(id) => {
-                    const item = favorites.find(f => f.id === id);
-                    handleItemClick(id, item?.media_type);
-                }} />
+                {tmdbFavs.length > 0 && (
+                    <div className='tmdb-content-section pro-list'>
+                        <h3 className='tmdb-section-title ribbon-red'>CMDB Pro List</h3>
+                        <Result 
+                            movies={tmdbFavs} 
+                            favorites={favorites} 
+                            onToggleFavorite={toggleFavorite} 
+                            onMovieClick={(id) => {
+                                const item = tmdbFavs.find(f => f.id === id);
+                                handleItemClick(id, item?.media_type);
+                            }} 
+                        />
+                    </div>
+                )}
+                {omdbFavs.length > 0 && (
+                    <div className='tmdb-content-section classic-list'>
+                        <h3 className='tmdb-section-title ribbon-gold'>CMDB List</h3>
+                        <Result 
+                            movies={omdbFavs} 
+                            favorites={favorites} 
+                            onToggleFavorite={toggleFavorite} 
+                            onMovieClick={(id) => handleItemClick(id, 'movie')} 
+                        />
+                    </div>
+                )}
+
+                
                 <ModalOverlay />
             </div>
         );
@@ -129,7 +170,6 @@ export const SearchBarTMDB = ({ placeholder, onFavoritesChange, betaResetKey, cu
 
     return (
         <div className='tmdb-search-parent'>
-            {/* Input and suggestions UI ... */}
             <div className='tmdb-input-wrapper'>
                 <input className='tmdb-input-field' value={query} onChange={(e)=>setQuery(e.target.value)} onKeyDown={(e)=>e.key==='Enter' && handleSearch()} placeholder='Describe a plot...' />
                 <button className='tmdb-search-button' onClick={() => handleSearch()} disabled={loading}>{loading ? '...' : 'Search'}</button>

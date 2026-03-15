@@ -205,3 +205,41 @@
 .tmdb-favorites-container {
     padding-top: 20px;
 }
+
+.ribbon-gold {
+    border-left: 8px solid #FFD700;
+    background: linear-gradient(90deg, rgba(255, 215, 0, 0.1), transparent);
+    color: #FFD700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+    padding: 10px 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    display: inline-block;
+    border-radius: 0 4px 4px 0;
+}
+
+.ribbon-red {
+    border-left: 8px solid #E50914;
+    background: linear-gradient(90deg, rgba(229, 9, 20, 0.1), transparent);
+    color: #E50914;
+    text-shadow: 0 0 10px rgba(229, 9, 20, 0.3);
+    padding: 10px 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    display: inline-block;
+    border-radius: 0 4px 4px 0;
+}
+
+.tmdb-section-title:hover {
+    filter: brightness(1.2);
+    transition: 0.3s ease;
+}
+
+.classic-list {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 30px;
+}
+
+.pro-list {
+    margin-top: 40px;
+}
