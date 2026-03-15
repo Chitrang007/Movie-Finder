@@ -133,6 +133,7 @@
 .tmdb-section-featured {
     background: linear-gradient(135deg, rgba(229, 9, 20, 0.05) 0%, transparent 100%);
 }
+
 .tmdb-section-featured .tmdb-section-title::before {
     background: #E50914;
     box-shadow: 0 0 12px rgba(229, 9, 20, 0.6);
@@ -146,6 +147,7 @@
 .tmdb-section-movies {
     background: linear-gradient(135deg, rgba(204, 156, 0, 0.05) 0%, transparent 100%);
 }
+
 .tmdb-section-movies .tmdb-section-title::before {
     background: #CC9C00;
     box-shadow: 0 0 12px rgba(204, 156, 0, 0.6);
@@ -154,24 +156,10 @@
 .tmdb-section-series {
     background: linear-gradient(135deg, rgba(0, 115, 230, 0.05) 0%, transparent 100%);
 }
+
 .tmdb-section-series .tmdb-section-title::before {
     background: #0073E6;
     box-shadow: 0 0 12px rgba(0, 115, 230, 0.6);
-}
-
-.tmdb-all-time-break {
-    background: linear-gradient(to right, transparent, rgba(16, 221, 94, 0.1), transparent);
-    padding: 60px 0;
-    margin: 40px 0;
-    text-align: center;
-}
-
-.tmdb-all-time-break-title {
-    font-size: 2.2rem;
-    font-weight: 900;
-    color: white;
-    text-transform: uppercase;
-    letter-spacing: -1px;
 }
 
 .tmdb-search-loading {
@@ -180,13 +168,6 @@
     align-items: center;
     justify-content: center;
     padding: 100px 0;
-}
-
-.tmdb-search-loading-text {
-    margin-top: 20px;
-    color: rgba(255, 255, 255, 0.6);
-    font-weight: 600;
-    letter-spacing: 1px;
 }
 
 .tmdb-search-spinner {
@@ -200,10 +181,6 @@
 
 @keyframes tmdb-spin { 
     to { transform: rotate(360deg); } 
-}
-
-.tmdb-favorites-container {
-    padding-top: 20px;
 }
 
 .ribbon-gold {
@@ -230,11 +207,6 @@
     border-radius: 0 4px 4px 0;
 }
 
-.tmdb-section-title:hover {
-    filter: brightness(1.2);
-    transition: 0.3s ease;
-}
-
 .classic-list {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     padding-bottom: 30px;
@@ -242,4 +214,28 @@
 
 .pro-list {
     margin-top: 40px;
+}
+
+@media (max-width: 768px) {
+    .tmdb-input-wrapper {
+        flex-direction: column;
+        background: transparent;
+        border: none;
+        gap: 10px;
+    }
+    .tmdb-input-field {
+        background: #1A1B1E;
+        border-radius: 12px;
+        border: 1px solid #333;
+    }
+    .tmdb-search-button {
+        padding: 12px;
+        width: 100%;
+    }
+    .ribbon-gold, .ribbon-red {
+        font-size: 1.2rem;
+        padding: 8px 12px;
+        width: 100%;
+        border-radius: 4px;
+    }
 }
