@@ -64,6 +64,24 @@
 
 .tmdb-modal-rating { color: #FFC107; }
 
+/* The Seasons Green & Status Badge */
+.tmdb-modal-seasons { 
+    color: #10DD5E !important; 
+    font-weight: 800; 
+}
+
+.status-badge {
+    background: rgba(16, 221, 94, 0.1);
+    color: #10DD5E;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    font-weight: 900;
+    border: 1px solid rgba(16, 221, 94, 0.3);
+    letter-spacing: 1px;
+}
+
 .tmdb-modal-main {
     display: flex;
     padding: 40px;
