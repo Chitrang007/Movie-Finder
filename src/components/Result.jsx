@@ -1,7 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Result.css';
 import { motion, AnimatePresence } from 'framer-motion';
-import { HiPlus, HiCheck } from 'react-icons/hi';
+import { HiPlus, HiCheck, HiOutlineFilm } from 'react-icons/hi';
+
+export const PosterPlaceHolder = () => (
+    <div className='poster-placeholder'>
+        <HiOutlineFilm className='placeholder-icon' />
+        <span className='placeholder-text'>Poster Unavailable</span>
+    </div>
+);
 
 export const Result = ({ movies, favorites, onToggleFavorite, onMovieClick }) => {
     if (movies.length === 0) {
@@ -28,6 +35,8 @@ export const Result = ({ movies, favorites, onToggleFavorite, onMovieClick }) =>
 }
 
 const Box = ({ movie, isFavorite, onToggle, onMovieClick }) => {
+    const [imgError, setImgError] = useState(false);
+
     const handleCardClick = () => {
         if (onMovieClick) onMovieClick(movie.id);
     };
@@ -47,7 +56,16 @@ const Box = ({ movie, isFavorite, onToggle, onMovieClick }) => {
             aria-label={`View details for ${movie.title}`}
         >
             <div className='movie-image-container'>
-                <img src={movie.image || 'https://via.placeholder.com/300x450?text=No+Poster'} alt={movie.title} />
+                {(!movie.image || movie.image === 'N/A' || imgError) ? (
+                    <PosterPlaceHolder />
+                ) : (
+                    <img
+                        src={movie.image}
+                        alt={movie.title}
+                        loading='lazy'
+                        onError={() => setImgError(true)}
+                    />
+                )}
                 <span className='rating-badge'>{movie.rating}</span>
                 
                 <button 

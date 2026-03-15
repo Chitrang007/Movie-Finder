@@ -3,7 +3,7 @@ import './SearchBar.css';
 import { Result } from './Result';
 import { MovieDetailModal } from './MovieDetailModal';
 
-const API_KEY = process.env.REACT_APP_OMDB_API_KEY;
+export const API_KEY = process.env.REACT_APP_OMDB_API_KEY;
 
 export const SearchBar = ({ placeholder, currentView, onFavoritesChange, homeResetKey }) => {
     const [query, setQuery] = useState('');
@@ -186,7 +186,6 @@ export const SearchBar = ({ placeholder, currentView, onFavoritesChange, homeRes
         if (e.key === 'Enter') handleSearch();
     };
 
-    // Shared Modal Component to avoid repetition
     const ModalOverlay = () => (
         <MovieDetailModal
             isOpen={!!selectedMovieId}

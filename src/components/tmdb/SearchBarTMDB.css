@@ -1,0 +1,139 @@
+.tmdb-search-parent {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.tmdb-beta-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: linear-gradient(90deg, rgba(16, 221, 94, 0.1), rgba(16, 221, 94, 0.05));
+    border: 1px solid rgba(16, 221, 94, 0.3);
+    color: #10DD5E;
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    width: fit-content;
+    margin: 0 auto 40px auto;
+}
+
+.tmdb-input-wrapper {
+    display: flex;
+    max-width: 700px;
+    margin: 0 auto 50px auto;
+    background: #1A1B1E;
+    padding: 6px;
+    border-radius: 12px;
+    border: 1px solid #333;
+}
+
+.tmdb-input-field {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: white;
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    outline: none;
+}
+
+.tmdb-search-button {
+    background: #10DD5E;
+    color: #000;
+    border: none;
+    padding: 0 30px;
+    border-radius: 8px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.tmdb-content-section {
+    margin-bottom: 60px;
+    padding: 20px;
+    border-radius: 16px;
+}
+
+.tmdb-section-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.tmdb-section-title::before {
+    content: '';
+    width: 5px;
+    height: 28px;
+    border-radius: 4px;
+}
+
+.tmdb-section-featured {
+    background: linear-gradient(135deg, rgba(229, 9, 20, 0.05) 0%, transparent 100%);
+}
+.tmdb-section-featured .tmdb-section-title::before {
+    background: #E50914;
+    box-shadow: 0 0 12px rgba(229, 9, 20, 0.6);
+}
+
+.tmdb-section-trending .tmdb-section-title::before {
+    background: #10DD5E;
+    box-shadow: 0 0 12px rgba(16, 221, 94, 0.6);
+}
+
+.tmdb-section-movies {
+    background: linear-gradient(135deg, rgba(204, 156, 0, 0.05) 0%, transparent 100%);
+}
+.tmdb-section-movies .tmdb-section-title::before {
+    background: #CC9C00;
+    box-shadow: 0 0 12px rgba(204, 156, 0, 0.6);
+}
+
+.tmdb-section-series {
+    background: linear-gradient(135deg, rgba(0, 115, 230, 0.05) 0%, transparent 100%);
+}
+.tmdb-section-series .tmdb-section-title::before {
+    background: #0073E6;
+    box-shadow: 0 0 12px rgba(0, 115, 230, 0.6);
+}
+
+.tmdb-all-time-break {
+    background: linear-gradient(to right, transparent, rgba(16, 221, 94, 0.1), transparent);
+    padding: 60px 0;
+    margin: 40px 0;
+    text-align: center;
+}
+
+.tmdb-all-time-break-title {
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+}
+
+.tmdb-search-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 0;
+}
+
+.tmdb-search-spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(16, 221, 94, 0.1);
+    border-top-color: #10DD5E;
+    border-radius: 50%;
+    animation: tmdb-spin 1s linear infinite;
+}
+
+@keyframes tmdb-spin { to { transform: rotate(360deg); } }

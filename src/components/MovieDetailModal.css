@@ -21,6 +21,12 @@
     border: 1px solid #333;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
     animation: slideUp 0.3s ease-out;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.movie-modal-card::-webkit-scrollbar {
+    display: none;
 }
 
 .movie-modal-close {
@@ -148,7 +154,21 @@
     line-height: 1.5;
 }
 
-.movie-modal-plot {
+.movie-modal-plot-section {
+    margin-top: 10px;
+    padding-top: 20px;
+    border-top: 1px solid #333;
+}
+
+.movie-modal-plot-section strong {
+    display: block;
+    color: #10DD5E;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.movie-modal-plot-text {
     font-size: 1rem;
     color: #ddd;
 }
