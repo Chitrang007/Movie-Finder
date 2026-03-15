@@ -3,7 +3,7 @@ import './SearchBar.css';
 import { Result } from './Result';
 import { MovieDetailModal } from './MovieDetailModal';
 
-export const API_KEY = process.env.REACT_APP_OMDB_API_KEY;
+export const OMDB_KEY = process.env.REACT_APP_OMDB_API_KEY;
 
 export const SearchBar = ({ placeholder, currentView, onFavoritesChange, homeResetKey }) => {
     const [query, setQuery] = useState('');
@@ -52,7 +52,7 @@ export const SearchBar = ({ placeholder, currentView, onFavoritesChange, homeRes
             const titles = ['Breaking Bad', 'Interstellar', 'The Dark Knight', 'Game of Thrones', 'Iron Man', 'Loki', 'Top Gun: Maverick'];
             try {
                 const results = await Promise.all(titles.map(async (title) => {
-                    const res = await fetch(`https://www.omdbapi.com/?t=${encodeURIComponent(title)}&apikey=${API_KEY}`);
+                    const res = await fetch(`https://www.omdbapi.com/?t=${encodeURIComponent(title)}&apikey=${OMDB_KEY}`);
                     const data = await res.json();
                     if (data.Response === "True") {
                         return {
@@ -78,7 +78,7 @@ export const SearchBar = ({ placeholder, currentView, onFavoritesChange, homeRes
             const titles = ['Dune: Part Two', 'Oppenheimer', 'Stranger Things', 'Squid Game', 'Wednesday', 'One Piece', 'The Last of Us'];
             try {
                 const results = await Promise.all(titles.map(async (title) => {
-                    const res = await fetch(`https://www.omdbapi.com/?t=${encodeURIComponent(title)}&apikey=${API_KEY}`);
+                    const res = await fetch(`https://www.omdbapi.com/?t=${encodeURIComponent(title)}&apikey=${OMDB_KEY}`);
                     const data = await res.json();
                     if (data.Response === "True") {
                         return {
@@ -104,7 +104,7 @@ export const SearchBar = ({ placeholder, currentView, onFavoritesChange, homeRes
             const titles = ['The Shawshank Redemption', 'The Godfather', 'The Dark Knight', 'The Godfather Part II', '12 Angry Men'];
             try {
                 const results = await Promise.all(titles.map(async (title) => {
-                    const res = await fetch(`https://www.omdbapi.com/?t=${encodeURIComponent(title)}&apikey=${API_KEY}`);
+                    const res = await fetch(`https://www.omdbapi.com/?t=${encodeURIComponent(title)}&apikey=${OMDB_KEY}`);
                     const data = await res.json();
                     if (data.Response === "True") {
                         return {
@@ -130,7 +130,7 @@ export const SearchBar = ({ placeholder, currentView, onFavoritesChange, homeRes
             const titles = ['Friends', 'The Office', 'Breaking Bad', 'Game of Thrones', 'Modern Family'];
             try {
                 const results = await Promise.all(titles.map(async (title) => {
-                    const res = await fetch(`https://www.omdbapi.com/?t=${encodeURIComponent(title)}&apikey=${API_KEY}`);
+                    const res = await fetch(`https://www.omdbapi.com/?t=${encodeURIComponent(title)}&apikey=${OMDB_KEY}`);
                     const data = await res.json();
                     if (data.Response === "True") {
                         return {
@@ -156,11 +156,11 @@ export const SearchBar = ({ placeholder, currentView, onFavoritesChange, homeRes
         setLoading(true);
         setHasSearched(true);
         try {
-            const searchResponse = await fetch(`https://www.omdbapi.com/?s=${query}&apikey=${API_KEY}`);
+            const searchResponse = await fetch(`https://www.omdbapi.com/?s=${query}&apikey=${OMDB_KEY}`);
             const searchData = await searchResponse.json();
             if (searchData.Search) {
                 const detailedMovies = await Promise.all(searchData.Search.map(async (movie) => {
-                    const detailResponse = await fetch(`https://www.omdbapi.com/?i=${movie.imdbID}&apikey=${API_KEY}`);
+                    const detailResponse = await fetch(`https://www.omdbapi.com/?i=${movie.imdbID}&apikey=${OMDB_KEY}`);
                     const detailData = await detailResponse.json();
                     return {
                         id: movie.imdbID,
