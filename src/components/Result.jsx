@@ -12,7 +12,7 @@ export const PosterPlaceHolder = () => (
 
 export const Result = ({ movies, favorites, onToggleFavorite, onMovieClick }) => {
     if (movies.length === 0) {
-        return <div className="no-results">No results found. Try something else!</div>;
+        return <div className='no-results'>No results found. Try something else!</div>;
     }
 
     return (
@@ -50,7 +50,7 @@ const Box = ({ movie, isFavorite, onToggle, onMovieClick }) => {
         <div
             className='MovieBox movie-box-clickable'
             onClick={handleCardClick}
-            role="button"
+            role='button'
             tabIndex={0}
             onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleCardClick(); } }}
             aria-label={`View details for ${movie.title}`}
@@ -62,7 +62,7 @@ const Box = ({ movie, isFavorite, onToggle, onMovieClick }) => {
                     <img
                         src={movie.image}
                         alt={movie.title}
-                        loading='lazy'
+                        loading='eager'
                         onError={() => setImgError(true)}
                     />
                 )}
@@ -73,10 +73,10 @@ const Box = ({ movie, isFavorite, onToggle, onMovieClick }) => {
                     onClick={handleFavClick}
                     aria-label={isFavorite ? 'Remove from My List' : 'Add to My List'}
                 >
-                    <AnimatePresence mode="wait" initial={false}>
+                    <AnimatePresence mode='wait' initial={false}>
                         {isFavorite ? (
                             <motion.div
-                                key="check"
+                                key='check'
                                 initial={{ rotate: -90, opacity: 0, scale: 0.5 }}
                                 animate={{ rotate: 0, opacity: 1, scale: 1 }}
                                 exit={{ rotate: 90, opacity: 0, scale: 0.5 }}
@@ -87,7 +87,7 @@ const Box = ({ movie, isFavorite, onToggle, onMovieClick }) => {
                             </motion.div>
                         ) : (
                             <motion.div
-                                key="plus"
+                                key='plus'
                                 initial={{ rotate: 90, opacity: 0, scale: 0.5 }}
                                 animate={{ rotate: 0, opacity: 1, scale: 1 }}
                                 exit={{ rotate: -90, opacity: 0, scale: 0.5 }}

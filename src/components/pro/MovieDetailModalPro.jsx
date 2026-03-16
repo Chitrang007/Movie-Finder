@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './MovieDetailModalTMDB.css';
+import './MovieDetailModalPro.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HiPlus, HiCheck, HiX } from 'react-icons/hi';
 import { PosterPlaceHolder } from '../Result'; 
@@ -59,7 +59,7 @@ export const MovieDetailModalTMDB = ({ isOpen, onClose, movieId, mediaType, favo
                 );
                 setTrailerKey(trailer ? trailer.key : null);
             } catch (err) {
-                console.error('Fetch error:', err);
+                console.error('Discovery Bureau Fetch Error:', err);
             } finally {
                 setLoading(false);
             }
@@ -95,12 +95,12 @@ export const MovieDetailModalTMDB = ({ isOpen, onClose, movieId, mediaType, favo
     return (
         <div className='tmdb-modal-backdrop' onClick={onClose}>
             <motion.div 
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
                 className='tmdb-modal-card' 
                 onClick={e => e.stopPropagation()}
             >
-                <button className='tmdb-modal-close' onClick={onClose}><HiX /></button>
+                <button className='tmdb-modal-close' onClick={onClose}><HiX size={24}/></button>
 
                 {loading ? (
                     <div className='tmdb-modal-loading'>
@@ -110,7 +110,7 @@ export const MovieDetailModalTMDB = ({ isOpen, onClose, movieId, mediaType, favo
                 ) : details && (
                     <div className='tmdb-modal-body'>
                         <div className='tmdb-modal-hero' style={{ 
-                            backgroundImage: `linear-gradient(to bottom, rgba(26, 27, 30, 0) 0%, rgba(26, 27, 30, 0.6) 50%, #1A1B1E 100%), url(${BACKDROP_BASE}${details.backdrop_path})` 
+                            backgroundImage: `linear-gradient(to bottom, rgba(26, 27, 30, 0) 0%, rgba(26, 27, 30, 0.8) 70%, #1A1B1E 100%), url(${BACKDROP_BASE}${details.backdrop_path})` 
                         }}>
                             <div className='tmdb-hero-content'>
                                 <h2 className='tmdb-modal-title'>{details.title || details.name}</h2>
@@ -137,7 +137,8 @@ export const MovieDetailModalTMDB = ({ isOpen, onClose, movieId, mediaType, favo
                                         src={`${IMG_BASE}${details.poster_path}`} 
                                         className='tmdb-modal-poster' 
                                         alt={details.title || details.name}
-                                        loading="lazy"
+                                        loading='eager'
+                                        crossOrigin='anonymous'
                                         onError={() => setImgError(true)}
                                     />
                                 )}
@@ -149,31 +150,32 @@ export const MovieDetailModalTMDB = ({ isOpen, onClose, movieId, mediaType, favo
                                         className={`tmdb-watchlist-btn ${isFavorite ? 'active' : ''}`}
                                         onClick={handleToggle}
                                     >
-                                        <div className='modal-icon-container'>
-                                            <AnimatePresence mode='wait' initial={false}>
-                                                <motion.div
-                                                    key={isFavorite ? 'check' : 'plus'}
-                                                    initial={{ scale: 0.5, opacity: 0 }}
-                                                    animate={{ scale: 1, opacity: 1 }}
-                                                    exit={{ scale: 0.5, opacity: 0 }}
-                                                    transition={{ duration: 0.2 }}
-                                                >
-                                                    {isFavorite ? <HiCheck size={20} /> : <HiPlus size={20} />}
-                                                </motion.div>
-                                            </AnimatePresence>
-                                        </div>
+                                        <AnimatePresence mode='wait' initial={false}>
+                                            <motion.div
+                                                key={isFavorite ? 'check' : 'plus'}
+                                                initial={{ scale: 0.5, opacity: 0 }}
+                                                animate={{ scale: 1, opacity: 1 }}
+                                                exit={{ scale: 0.5, opacity: 0 }}
+                                                className='modal-icon-wrapper'
+                                            >
+                                                {isFavorite ? <HiCheck size={20} /> : <HiPlus size={20} />}
+                                            </motion.div>
+                                        </AnimatePresence>
                                         <span>{isFavorite ? 'In My List' : 'Add to My List'}</span>
                                     </button>
 
                                     {trailerKey && (
                                         <button className='tmdb-trailer-btn' onClick={() => setShowVideo(true)}>
-                                            ▶ Watch Trailer
+                                            <svg viewBox='0 0 24 24' fill='currentColor' className='play-svg'>
+                                                <path d='M8 5v14l11-7z' />
+                                            </svg>
+                                            Watch Trailer
                                         </button>
                                     )}
                                 </div>
 
                                 {providers.length > 0 && (
-                                    <div className='streaming-container' style={{ marginBottom: '25px' }}>
+                                    <div className='streaming-container'>
                                         <p className='streaming-label'>Where to Watch</p>
                                         <div className='streaming-list'>
                                             {providers.map(p => (
@@ -183,7 +185,8 @@ export const MovieDetailModalTMDB = ({ isOpen, onClose, movieId, mediaType, favo
                                                     alt={p.provider_name}
                                                     className='provider-logo'
                                                     title={p.provider_name}
-                                                    loading="lazy"
+                                                    crossOrigin='anonymous'
+                                                    loading='eager' 
                                                 />
                                             ))}
                                         </div>
@@ -205,17 +208,18 @@ export const MovieDetailModalTMDB = ({ isOpen, onClose, movieId, mediaType, favo
                     </div>
                 )}
                 
-                {showVideo && trailerKey && (
+                {showVideo && (
                     <div className='tmdb-video-overlay' onClick={() => setShowVideo(false)}>
                         <div className='tmdb-video-container' onClick={e => e.stopPropagation()}>
                             <iframe
                                 src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1`}
                                 title='YouTube trailer'
-                                frameBorder='0'
                                 allow='autoplay; encrypted-media'
                                 allowFullScreen
                             ></iframe>
-                            <button className='close-video' onClick={() => setShowVideo(false)}>Close</button>
+                            <button className='close-video' onClick={() => setShowVideo(false)}>
+                                <HiX size={22} />
+                            </button>
                         </div>
                     </div>
                 )}

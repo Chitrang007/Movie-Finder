@@ -12,28 +12,31 @@ import (
 )
 
 func main() {
-	// Look for the .env in the parent directory (MOVIE-FINDER root)
+	// 1. Load Environment Variables
 	err := godotenv.Load("../.env")
 	if err != nil {
 		fmt.Println("Warning: Could not find .env in parent folder, checking local...")
-		godotenv.Load() // Fallback to local
+		godotenv.Load()
 	}
 
-	// Use the exact variable name from your current .env
-	apiKey := os.Getenv("REACT_APP_TMDB_API_KEY")
-	if apiKey == "" {
-		log.Fatal("TMDB Key not found in .env. Check your variable name!")
+	tmdbKey := os.Getenv("REACT_APP_TMDB_API_KEY")
+	omdbKey := os.Getenv("REACT_APP_OMDB_API_KEY")
+
+	if tmdbKey == "" || omdbKey == "" {
+		log.Fatal("API Keys missing in .env! Ensure both TMDB and OMDB keys are set.")
 	}
 
+	// 2. Setup Routes
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		proxyHandler(w, r, apiKey)
+		proxyHandler(w, r, tmdbKey, omdbKey)
 	})
 
-	fmt.Println("🚀 Go Proxy Tunnel active on http://localhost:8080")
+	fmt.Println("🚀 Discovery Bureau Proxy active on http://localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
-func proxyHandler(w http.ResponseWriter, r *http.Request, apiKey string) {
+func proxyHandler(w http.ResponseWriter, r *http.Request, tmdbKey string, omdbKey string) {
+	// CORS Headers
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
@@ -43,17 +46,30 @@ func proxyHandler(w http.ResponseWriter, r *http.Request, apiKey string) {
 	}
 
 	var targetURL string
-	if strings.HasPrefix(r.URL.Path, "/image") {
+
+	// 3. Routing Logic
+	if strings.HasPrefix(r.URL.Path, "/omdb") {
+		// --- OMDB TUNNEL ---
+		// Expects frontend to call: http://localhost:8080/omdb?t=Inception
+		targetURL = fmt.Sprintf("https://www.omdbapi.com/?apikey=%s", omdbKey)
+		if r.URL.RawQuery != "" {
+			targetURL += "&" + r.URL.RawQuery
+		}
+
+	} else if strings.HasPrefix(r.URL.Path, "/image") {
+		// --- TMDB IMAGE TUNNEL ---
 		imagePath := strings.TrimPrefix(r.URL.Path, "/image")
 		targetURL = "https://image.tmdb.org/t/p" + imagePath
+
 	} else {
-		// Append the API key to every request automatically
-		targetURL = fmt.Sprintf("https://api.themoviedb.org/3%s?api_key=%s", r.URL.Path, apiKey)
+		// --- TMDB API TUNNEL (Default) ---
+		targetURL = fmt.Sprintf("https://api.themoviedb.org/3%s?api_key=%s", r.URL.Path, tmdbKey)
 		if r.URL.RawQuery != "" {
 			targetURL += "&" + r.URL.RawQuery
 		}
 	}
 
+	// 4. Execute the Request
 	resp, err := http.Get(targetURL)
 	if err != nil {
 		http.Error(w, "Proxy Error", http.StatusBadGateway)
@@ -61,6 +77,7 @@ func proxyHandler(w http.ResponseWriter, r *http.Request, apiKey string) {
 	}
 	defer resp.Body.Close()
 
+	// Copy headers and body back to frontend
 	for k, v := range resp.Header {
 		w.Header()[k] = v
 	}
