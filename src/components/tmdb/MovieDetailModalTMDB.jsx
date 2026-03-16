@@ -3,9 +3,18 @@ import './MovieDetailModalTMDB.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HiPlus, HiCheck, HiX } from 'react-icons/hi';
 import { PosterPlaceHolder } from '../Result'; 
-import { TMDB_KEY, IMG_BASE } from './SearchBarTMDB';
 
-const BACKDROP_BASE = 'https://image.tmdb.org/t/p/original';
+const TMDB_BASE = process.env.NODE_ENV === 'development' 
+    ? 'http://localhost:8080' 
+    : '/tmdb-api';
+
+const IMG_BASE = process.env.NODE_ENV === 'development'
+    ? 'http://localhost:8080/image/w500'
+    : '/tmdb-images/w500';
+
+const BACKDROP_BASE = process.env.NODE_ENV === 'development'
+    ? 'http://localhost:8080/image/original'
+    : '/tmdb-images/original';
 
 export const MovieDetailModalTMDB = ({ isOpen, onClose, movieId, mediaType, favorites, onToggleFavorite }) => {
     const [details, setDetails] = useState(null);
@@ -33,9 +42,9 @@ export const MovieDetailModalTMDB = ({ isOpen, onClose, movieId, mediaType, favo
 
             try {
                 const [detailRes, providerRes, videoRes] = await Promise.all([
-                    fetch(`https://api.themoviedb.org/3/${category}/${movieId}?api_key=${TMDB_KEY}`),
-                    fetch(`https://api.themoviedb.org/3/${category}/${movieId}/watch/providers?api_key=${TMDB_KEY}`),
-                    fetch(`https://api.themoviedb.org/3/${category}/${movieId}/videos?api_key=${TMDB_KEY}`)
+                    fetch(`${TMDB_BASE}/${category}/${movieId}`),
+                    fetch(`${TMDB_BASE}/${category}/${movieId}/watch/providers`),
+                    fetch(`${TMDB_BASE}/${category}/${movieId}/videos`)
                 ]);
 
                 const detailData = await detailRes.json();
@@ -76,7 +85,8 @@ export const MovieDetailModalTMDB = ({ isOpen, onClose, movieId, mediaType, favo
     const getRuntimeDisplay = () => {
         if (!details) return '';
         if (details.runtime) return `${details.runtime} min`;
-        if (details.episode_run_time?.length > 0) return `${details.episode_run_time[0]} min`;
+        if (details.episode_run_time?.length > 0) return `Average runtime per episode: ${details.episode_run_time[0]} min`;
+        if (details.last_episode_to_air?.runtime) return `Average runtime per episode: ${details.last_episode_to_air.runtime} min`;
         return 'N/A';
     };
     
@@ -95,7 +105,7 @@ export const MovieDetailModalTMDB = ({ isOpen, onClose, movieId, mediaType, favo
                 {loading ? (
                     <div className='tmdb-modal-loading'>
                         <div className='tmdb-spinner'></div>
-                        <p>Fetching Cinematic Details...</p>
+                        <p>Fetching Details...</p>
                     </div>
                 ) : details && (
                     <div className='tmdb-modal-body'>
@@ -127,6 +137,7 @@ export const MovieDetailModalTMDB = ({ isOpen, onClose, movieId, mediaType, favo
                                         src={`${IMG_BASE}${details.poster_path}`} 
                                         className='tmdb-modal-poster' 
                                         alt={details.title || details.name}
+                                        loading="lazy"
                                         onError={() => setImgError(true)}
                                     />
                                 )}
@@ -168,10 +179,11 @@ export const MovieDetailModalTMDB = ({ isOpen, onClose, movieId, mediaType, favo
                                             {providers.map(p => (
                                                 <img 
                                                     key={p.provider_id}
-                                                    src={`https://image.tmdb.org/t/p/original${p.logo_path}`} 
+                                                    src={`${TMDB_BASE}/image/original${p.logo_path}`} 
                                                     alt={p.provider_name}
                                                     className='provider-logo'
                                                     title={p.provider_name}
+                                                    loading="lazy"
                                                 />
                                             ))}
                                         </div>

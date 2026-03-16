@@ -4,8 +4,13 @@ import { Result } from '../Result';
 import { MovieDetailModalTMDB } from './MovieDetailModalTMDB';
 import { MovieDetailModal } from '../MovieDetailModal';
 
-export const TMDB_KEY = process.env.REACT_APP_TMDB_API_KEY;
-export const IMG_BASE = 'https://image.tmdb.org/t/p/w500';
+const TMDB_BASE = process.env.NODE_ENV === 'development' 
+    ? 'http://localhost:8080' 
+    : '/tmdb-api';
+
+const IMG_BASE = process.env.NODE_ENV === 'development'
+    ? 'http://localhost:8080/image/w500'
+    : '/tmdb-images/w500';
 
 export const SearchBarTMDB = ({ onFavoritesChange, betaResetKey, currentView }) => {
     const [query, setQuery] = useState('');
@@ -16,10 +21,8 @@ export const SearchBarTMDB = ({ onFavoritesChange, betaResetKey, currentView }) 
     const [allTimeSeries, setAllTimeSeries] = useState([]);
     const [loading, setLoading] = useState(false);
     const [hasSearched, setHasSearched] = useState(false);
-    
     const [selectedMediaType, setSelectedMediaType] = useState('movie');
     const [selectedMovieId, setSelectedMovieId] = useState(null);
-    
     const [favorites, setFavorites] = useState(() => {
         const saved = localStorage.getItem('cine-favs');
         return saved ? JSON.parse(saved) : [];
@@ -60,13 +63,11 @@ export const SearchBarTMDB = ({ onFavoritesChange, betaResetKey, currentView }) 
         media_type: movie.media_type || (movie.first_air_date ? 'tv' : 'movie')
     });
 
-    // EFFECT: Sync Favorites to LocalStorage
     useEffect(() => {
         localStorage.setItem('cine-favs', JSON.stringify(favorites));
         if (onFavoritesChange) onFavoritesChange(favorites.length);
     }, [favorites, onFavoritesChange]);
 
-    // EFFECT: The 'Refresh' Logic from Nav Button
     useEffect(() => {
         if (betaResetKey > 0) {
             setQuery('');
@@ -77,15 +78,14 @@ export const SearchBarTMDB = ({ onFavoritesChange, betaResetKey, currentView }) 
         }
     }, [betaResetKey]);
 
-    // EFFECT: Initial Data Fetch
     useEffect(() => {
         const fetchInitialData = async () => {
             try {
                 const [trendRes, featRes, topMoviesRes, topTVRes] = await Promise.all([
-                    fetch(`https://api.themoviedb.org/3/trending/all/day?api_key=${TMDB_KEY}`),
-                    fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${TMDB_KEY}`),
-                    fetch(`https://api.themoviedb.org/3/movie/top_rated?api_key=${TMDB_KEY}`),
-                    fetch(`https://api.themoviedb.org/3/tv/top_rated?api_key=${TMDB_KEY}`)
+                    fetch(`${TMDB_BASE}/trending/all/day`),
+                    fetch(`${TMDB_BASE}/movie/popular`),
+                    fetch(`${TMDB_BASE}/movie/top_rated`),
+                    fetch(`${TMDB_BASE}/tv/top_rated`)
                 ]);
 
                 const trendData = await trendRes.json();
@@ -130,7 +130,7 @@ export const SearchBarTMDB = ({ onFavoritesChange, betaResetKey, currentView }) 
 
             let candidateMovies = [];
             const requests = words.map(word =>
-                fetch(`https://api.themoviedb.org/3/search/multi?api_key=${TMDB_KEY}&query=${encodeURIComponent(word)}`)
+                fetch(`${TMDB_BASE}/search/multi?query=${encodeURIComponent(word)}`)
             );
 
             const responses = await Promise.all(requests);
