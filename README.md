@@ -16,6 +16,8 @@
     * Season and Episode tracking for TV Series.
 * **Persistent Collection**: A browser-based **Watchlist** that survives refreshes, categorized into "Classic" and "Pro" selections.
 * **Smart State Management**: Synchronized watchlist counts across the Navbar and Search components.
+* **ISP-Block Resilience**: Integrated a custom Reverse Proxy architecture to bypass regional DNS filtering and ensure 100% uptime for TMDB data and images.
+* **Serverless API Shielding**: Implemented Vercel Serverless Functions to handle API requests securely, ensuring keys are never exposed in the client-side network tab.
 
 ---
 
@@ -28,6 +30,9 @@
     * **The Movie Database (TMDB) API v3** (Primary Pro Source)
     * **Open Movie Database (OMDb) API** (Classic Source)
 * **Deployment**: Vercel (CI/CD)
+* **Backend (Local Proxy)**: Go (Golang)
+* **Backend (Production)**: Vercel Serverless Functions (Node.js)
+* **Middleware**: `godotenv` for secure secrets management.
 
 ---
 
@@ -47,3 +52,10 @@ cd Movie-Finder
 
 # Install dependencies
 npm install
+
+# Terminal 1: Start the Go Proxy Tunnel
+cd proxy-server
+go run main.go
+
+# Terminal 2: Start the React Frontend
+npm start
