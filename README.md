@@ -18,6 +18,8 @@
 * **Smart State Management**: Synchronized watchlist counts across the Navbar and Search components.
 * **ISP-Block Resilience**: Integrated a custom Reverse Proxy architecture to bypass regional DNS filtering and ensure 100% uptime for TMDB data and images.
 * **Serverless API Shielding**: Implemented Vercel Serverless Functions to handle API requests securely, ensuring keys are never exposed in the client-side network tab.
+* **Image Delivery Optimization**: Native browser **Lazy Loading** implemented for all movie posters and streaming logos to minimize bandwidth and maximize performance.
+* **Environment-Aware Hybrid Routing**: Smart context-switching logic that automatically detects the environment and routes traffic through either the local Go microservice or Vercel Edge functions.
 
 ---
 
@@ -33,6 +35,27 @@
 * **Backend (Local Proxy)**: Go (Golang)
 * **Backend (Production)**: Vercel Serverless Functions (Node.js)
 * **Middleware**: `godotenv` for secure secrets management.
+
+---
+
+## 🏗 Architecture
+
+* CMDB PRO utilizes a **Multi-Service Architecture**. Locally, a **Go-based microservice** acts as a secure bridge to bypass ISP-level restrictions. In production, requests are routed through **Vercel Edge Rewrites and Serverless Functions**, creating a "Forever Fix" for API connectivity issues while keeping sensitive metadata hidden from the browser.
+* This hybrid approach ensures that the development experience is identical to the production environment, abstracting the complexity of API authentication and networking away from the UI layer.
+
+---
+
+## 🔒 Security & Best Practices
+* **Zero-Leak Policy**: API keys are never exposed in the client-side JavaScript bundle or the browser's Network tab.
+* **Backend Authentication**: All TMDB requests are authenticated server-side, preventing unauthorized use of API quotas.
+* **Stateless Proxying**: Neither the Go proxy nor the Vercel function stores user data, ensuring a privacy-first experience.
+
+---
+
+## ⚡ Performance
+* **Framer Motion Integration**: Optimized animations using AnimatePresence for smooth modal mounting/unmounting.
+* **Asset Optimization**: High-fidelity backdrops are served via a delegated image proxy to handle resolution scaling effectively.
+* **Scoring Logic**: Custom weighted algorithm that prioritizes title matches over overview descriptions for highly accurate search results.
 
 ---
 
@@ -52,6 +75,11 @@ cd Movie-Finder
 
 # Install dependencies
 npm install
+
+# Initialize Go modules (if running for the first time)
+cd proxy-server
+go mod tidy
+cd ..
 
 # Terminal 1: Start the Go Proxy Tunnel
 cd proxy-server
