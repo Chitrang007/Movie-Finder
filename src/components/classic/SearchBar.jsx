@@ -3,7 +3,9 @@ import './SearchBar.css';
 import { Result } from '../Result';
 import { MovieDetailModal } from './MovieDetailModal';
 
-export const OMDB_BASE = 'http://localhost:8080/omdb';
+export const OMDB_BASE = process.env.NODE_ENV === 'development'
+    ? 'http://localhost:8080/omdb'
+    : '/omdb-api';
 
 export const SearchBar = ({ placeholder, currentView, onFavoritesChange, homeResetKey }) => {
     const [query, setQuery] = useState('');

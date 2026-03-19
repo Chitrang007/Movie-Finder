@@ -1,6 +1,8 @@
 {
-  "name": "movie-finder",
-  "version": "0.1.0",
+  "name": "cmdb-engine",
+  "version": "1.0.0",
+  "description": "Professional-grade Cinematic Movie Discovery Bureau engine.",
+  "homepage": "https://cmdb-engine.vercel.app",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^6.0.0",
