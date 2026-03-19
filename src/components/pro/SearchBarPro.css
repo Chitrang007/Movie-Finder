@@ -239,3 +239,10 @@
         border-radius: 4px;
     }
 }
+
+.pro-list-title,
+.classic-list-title {
+    letter-spacing: 3px;
+    font-weight: 300;
+    opacity: 0.85;
+}

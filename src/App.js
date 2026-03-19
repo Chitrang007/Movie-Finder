@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import './App.css';
-import { SearchBar } from './components/SearchBar';
-import { SearchBarTMDB } from './components/tmdb/SearchBarTMDB';
+import { SearchBar } from './components/classic/SearchBar';
+import { SearchBarTMDB } from './components/pro/SearchBarPro';
 
 function App() {
-  // 'home' is now the TMDB Pro view, 'classic' is the OMDb view
   const [view, setView] = useState('home');
   const [favCount, setFavCount] = useState(0);
   const [classicResetKey, setClassicResetKey] = useState(0);
@@ -26,7 +25,7 @@ function App() {
         <div className='nav-content'>
           <div className='logo' onClick={goHome} style={{ cursor: 'pointer' }}>
             <img src='/logo1.png' alt='CineStream Logo' className='logo-img' />
-            CMDB | Chitrang's Movie Database
+            CMDB | Cinematic Movie Discovery Bureau
           </div>
           
           <div className='nav-links'>
@@ -55,10 +54,19 @@ function App() {
       </nav>
 
       <div className='main-container'>
-        {/* Header Logic: Highlighting the Pro and Classic distinction */}
-        {view === 'home' && <div className='Header Header-beta'>CMDB Pro: Plot Based Discovery.</div>}
-        {view === 'classic' && <div className='Header'>CMDB Classic: Title Search. Find a stream.</div>}
-        {view === 'favorites' && <div className='Header'>Your CMDB Vault.</div>}
+        {view === 'home' && (
+          <div className='Header Header-beta'>
+            CMDB Pro: Plot Based Discovery Bureau.
+          </div>
+        )}
+        {view === 'classic' && (
+          <div className='Header Header-classic'>
+            CMDB Classic: Multi-Source API Orchestration.
+          </div>
+        )}
+        {view === 'favorites' && (
+          <div className='Header Header-favorites'>Your Cinematic Vault.</div>
+        )}
 
         {view === 'home' ? (
           <SearchBarTMDB 

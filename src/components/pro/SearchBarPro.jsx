@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import './SearchBarTMDB.css';
+import './SearchBarPro.css';
 import { Result } from '../Result';
-import { MovieDetailModalTMDB } from './MovieDetailModalTMDB';
-import { MovieDetailModal } from '../MovieDetailModal';
+import { MovieDetailModalTMDB } from './MovieDetailModalPro';
+import { MovieDetailModal } from '../classic/MovieDetailModal';
 
 const TMDB_BASE = process.env.NODE_ENV === 'development' 
     ? 'http://localhost:8080' 
@@ -195,13 +195,13 @@ export const SearchBarTMDB = ({ onFavoritesChange, betaResetKey, currentView }) 
                 <div className='tmdb-favorites-container'>
                     {proList.length > 0 && (
                         <div className='tmdb-content-section pro-list'>
-                            <h3 className='tmdb-section-title ribbon-red'>CMDB Pro List</h3>
+                            <h3 className='tmdb-section-title ribbon-red pro-list-title'>CMDB Pro List</h3>
                             <Result movies={proList} favorites={favorites} onToggleFavorite={toggleFavorite} onMovieClick={(id) => handleItemClick(id, proList.find(f => f.id === id)?.media_type)} />
                         </div>
                     )}
                     {cmdbList.length > 0 && (
                         <div className='tmdb-content-section classic-list'>
-                            <h3 className='tmdb-section-title ribbon-gold'>CMDB List</h3>
+                            <h3 className='tmdb-section-title ribbon-gold classic-list-title'>CMDB List</h3>
                             <Result movies={cmdbList} favorites={favorites} onToggleFavorite={toggleFavorite} onMovieClick={(id) => handleItemClick(id, 'movie')} />
                         </div>
                     )}

@@ -1,24 +1,24 @@
-# CMDB PRO – Chitrang's Movie Database
+# CMDB PRO – Cinematic Movie Discovery Bureau
 
-**CMDB PRO** is a high-performance, React-based cinematic exploration platform. It goes beyond simple searching by utilizing a **Dual-Engine API system** (OMDb + TMDB) to provide deep metadata, streaming availability, and a professional-grade user interface.
+**CMDB PRO** is a high-performance, React-based cinematic exploration platform. IIt operates as a sophisticated **Dual-Engine system** orchestrating data from both OMDb and TMDB to provide deep metadata, real-time streaming availability, and a professional-grade "Bureau" interface.
 
 ---
 
 ## 🚀 Key Features
 
 * **Dual-Engine Intelligence**: 
-    * **CMDB Classic**: Powered by **OMDb** for lightweight, title-focused IMDb data.
-    * **CMDB PRO**: Powered by **TMDB** for high-fidelity backdrops, trending lists, and multi-search capabilities.
+    * **CMDB Classic**: Leverages **OMDb** for lightweight, title-focused IMDb data.
+    * **CMDB PRO**: Utilizes **TMDB** for high-fidelity backdrops, trending lists, and multi-search capabilities.
 * **Natural Language Plot Search**: Search using descriptions (e.g., "dream inside a dream") instead of just titles, powered by a custom scoring algorithm.
 * **Cinematic Modal Experience**: 
     * Dynamic backdrop blurring and "Netflix-style" layout.
     * **Watch Availability**: Real-time "Where to Watch" data (Netflix, Prime, Disney+, etc.).
-    * Season and Episode tracking for TV Series.
+    * **Series Intelligence**: Deep-link tracking for TV seasons and episode runtimes.
 * **Persistent Collection**: A browser-based **Watchlist** that survives refreshes, categorized into "Classic" and "Pro" selections.
 * **Smart State Management**: Synchronized watchlist counts across the Navbar and Search components.
 * **ISP-Block Resilience**: Integrated a custom Reverse Proxy architecture to bypass regional DNS filtering and ensure 100% uptime for TMDB data and images.
 * **Serverless API Shielding**: Implemented Vercel Serverless Functions to handle API requests securely, ensuring keys are never exposed in the client-side network tab.
-* **Image Delivery Optimization**: Native browser **Lazy Loading** implemented for all movie posters and streaming logos to minimize bandwidth and maximize performance.
+* **Image Delivery Optimization**: mplemented **Eager Loading** for critical UI assets (Posters/Logos) within modals and lists to ensure instant rendering in production environments.
 * **Environment-Aware Hybrid Routing**: Smart context-switching logic that automatically detects the environment and routes traffic through either the local Go microservice or Vercel Edge functions.
 
 ---

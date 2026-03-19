@@ -189,9 +189,17 @@
     border: none !important;
 }
 
-.Header-beta {
+.Header-beta,
+.Header-classic,
+.Header-favorites {
     color: #10DD5E;
     font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 3px;
+    font-weight: 300;
+    opacity: 0.85;
+}
+  
+.Header-classic {
+    margin: 0 0 20px 0;
 }

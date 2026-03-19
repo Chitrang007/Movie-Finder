@@ -49,17 +49,17 @@
     max-height: 90vh;
     overflow-y: auto;
     position: relative;
-    border: 1px solid #333;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     scrollbar-width: none;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.7);
+    box-shadow: 0 40px 80px rgba(0,0,0,0.8);
 }
 
 .tmdb-modal-card::-webkit-scrollbar { display: none; }
 
 .tmdb-modal-hero {
-    height: 380px;
+    height: 400px;
     background-size: cover;
-    background-position: center;
+    background-position: center top;
     display: flex;
     align-items: flex-end;
     padding: 40px;
@@ -70,11 +70,12 @@
 
 .tmdb-modal-title {
     font-size: 2.8rem;
-    font-weight: 900;
+    font-weight: 800;
     color: white;
     margin: 0;
     text-shadow: 0 4px 15px rgba(0,0,0,0.6);
     line-height: 1.1;
+    letter-spacing: -1px;
 }
 
 .tmdb-modal-meta {
@@ -95,7 +96,6 @@
 
 .tmdb-modal-rating { color: #FFC107; }
 
-/* The Seasons Green & Status Badge */
 .tmdb-modal-seasons { 
     color: #10DD5E !important; 
     font-weight: 800; 
@@ -132,10 +132,10 @@
 }
 
 .streaming-container {
-    padding: 14px;
-    background: rgba(255, 255, 255, 0.04);
-    border-radius: 12px;
-    margin-top: 25px;
+    margin: 25px 0;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 15px;
+    border-radius: 10px;
     width: fit-content;
     min-width: 200px;
     border: 1px solid rgba(255,255,255,0.05);
@@ -179,6 +179,14 @@
     flex-wrap: wrap;
 }
 
+.modal-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 20px;
+    width: 20px;
+}
+
 .tmdb-watchlist-btn {
     display: flex;
     align-items: center;
@@ -208,7 +216,8 @@
 .tmdb-trailer-btn {
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+    gap: 12px;
     padding: 12px 24px;
     border-radius: 8px;
     border: none;
@@ -226,6 +235,15 @@
     box-shadow: 0 5px 15px rgba(229, 9, 20, 0.3);
 }
 
+.play-svg {
+    width: 22px;
+    height: 22px;
+    fill: white;
+    display: inline-block;
+    flex-shrink: 0;
+    transform: translateY(1px);
+}
+
 .tmdb-plot-box {
     margin-top: 10px;
 }
@@ -240,9 +258,9 @@
 }
 
 .tmdb-plot-box p {
-    line-height: 1.7;
-    color: #ddd;
-    font-size: 1.05rem;
+    line-height: 1.8;
+    color: #b3b3b3;
+    font-size: 1rem;
     margin: 0;
 }
 
@@ -316,20 +334,33 @@
 
 .close-video {
     position: absolute;
-    top: -45px;
+    top: -55px;
     right: 0;
-    background: transparent;
-    color: white;
-    border: none;
-    font-size: 1.5rem;
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 10;
+}
+
+.close-video svg {
+    display: block;
+    flex-shrink: 0;
 }
 
 @media (max-width: 768px) {
-    .tmdb-modal-main { flex-direction: column; padding: 25px; gap: 20px; }
-    .tmdb-left-col { width: 100%; display: flex; flex-direction: column; align-items: center; }
-    .tmdb-modal-poster { max-width: 160px; }
-    .tmdb-modal-title { font-size: 1.8rem; }
-    .tmdb-action-bar { justify-content: center; width: 100%; }
+    .tmdb-modal-title { font-size: 2rem; }
+    .tmdb-modal-hero { height: 300px; padding: 20px; }
+    .tmdb-modal-main { flex-direction: column; padding: 20px; gap: 20px; }
+    .tmdb-left-col { display: none; }
+    .tmdb-action-bar { width: 100%; justify-content: center; }
     .tmdb-watchlist-btn, .tmdb-trailer-btn { flex: 1; justify-content: center; font-size: 0.9rem; }
+    .close-video { top: -65px; right: 10px; }
 }
