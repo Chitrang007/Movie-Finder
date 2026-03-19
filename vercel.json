@@ -5,6 +5,10 @@
       "destination": "/api/tmdb?path=:path*"
     },
     {
+      "source": "/omdb-api/:path*",
+      "destination": "/api/omdb?path=:path*"
+    },
+    {
       "source": "/tmdb-images/:path*",
       "destination": "https://image.tmdb.org/t/p/:path*"
     },
