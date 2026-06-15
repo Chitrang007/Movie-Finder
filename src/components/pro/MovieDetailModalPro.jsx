@@ -16,6 +16,10 @@ const BACKDROP_BASE = process.env.NODE_ENV === 'development'
     ? 'http://localhost:8080/image/original'
     : '/tmdb-images/original';
 
+const LOGO_BASE = process.env.NODE_ENV === 'development'
+    ? 'http://localhost:8080/image/original'
+    : '/tmdb-images/original';
+
 export const MovieDetailModalTMDB = ({ isOpen, onClose, movieId, mediaType, favorites, onToggleFavorite }) => {
     const [details, setDetails] = useState(null);
     const [providers, setProviders] = useState([]);
@@ -181,7 +185,7 @@ export const MovieDetailModalTMDB = ({ isOpen, onClose, movieId, mediaType, favo
                                             {providers.map(p => (
                                                 <img 
                                                     key={p.provider_id}
-                                                    src={`${TMDB_BASE}/image/original${p.logo_path}`} 
+                                                    src={`${LOGO_BASE}${p.logo_path}`} 
                                                     alt={p.provider_name}
                                                     className='provider-logo'
                                                     title={p.provider_name}
