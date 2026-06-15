@@ -5,6 +5,27 @@ Live - https://cmdb-engine.vercel.app/
 **CMDB PRO** is a high-performance, React-based cinematic exploration platform. IIt operates as a sophisticated **Dual-Engine system** orchestrating data from both OMDb and TMDB to provide deep metadata, real-time streaming availability, and a professional-grade "Bureau" interface.
 
 ---
+# Screenshots
+
+**PRO**
+
+<img width="1279" height="656" alt="image" src="https://github.com/user-attachments/assets/1f939d9e-8f82-4e94-aabc-ab55fced040d" />
+<img width="1915" height="1010" alt="image" src="https://github.com/user-attachments/assets/2fac62a3-1d57-4c83-bbe6-4b507e2dfb76" />
+
+
+**CLASSIC**
+<img width="1277" height="650" alt="image" src="https://github.com/user-attachments/assets/d46d3c21-35f0-4431-8e60-002a9cf098a1" />
+<img width="1278" height="651" alt="image" src="https://github.com/user-attachments/assets/51197f96-f8a7-4605-93f9-a8e2b4b23b43" />
+
+
+**LIST VIEW**
+<img width="1274" height="643" alt="image" src="https://github.com/user-attachments/assets/e6d3fe2d-e420-495a-b4ac-0800b6f53b89" />
+<img width="1275" height="651" alt="image" src="https://github.com/user-attachments/assets/b17b75e1-549f-4445-8c09-381c78fafe59" />
+
+# 🎥 Demo
+<img width="1080" height="522" alt="cmdb-enigine_demo-1" src="https://github.com/user-attachments/assets/02105766-7795-4c5a-9faa-15f892061faa" />
+
+---
 
 ## 🚀 Key Features
 
