@@ -1,5 +1,7 @@
 # CMDB PRO – Cinematic Movie Discovery Bureau
 
+Live - https://cmdb-engine.vercel.app/
+
 **CMDB PRO** is a high-performance, React-based cinematic exploration platform. IIt operates as a sophisticated **Dual-Engine system** orchestrating data from both OMDb and TMDB to provide deep metadata, real-time streaming availability, and a professional-grade "Bureau" interface.
 
 ---
